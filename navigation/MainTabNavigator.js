@@ -16,11 +16,7 @@ HomemadeStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
-      }
+      name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
     />
   ),
 };
@@ -34,7 +30,7 @@ DineoutStack.navigationOptions = {
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'}
+      name={Platform.OS === 'ios' ? 'ios-restaurant' : 'md-restaurant'}
     />
   ),
 };
@@ -44,11 +40,11 @@ const SuggestionsStack = createStackNavigator({
 });
 
 SuggestionsStack.navigationOptions = {
-  tabBarLabel: 'Suggestions',
+  tabBarLabel: 'Delivery',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'}
+      name={Platform.OS === 'ios' ? 'ios-bicycle' : 'md-bicycle'}
     />
   ),
 };
