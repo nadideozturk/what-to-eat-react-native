@@ -3,54 +3,76 @@ import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomemadeScreen from '../screens/HomemadeScreen';
-import DineoutScreen from '../screens/DineoutScreen';
-import SuggestionsScreen from '../screens/SuggestionsScreen';
+import HomeScreen from '../screens/HomeScreen';
+import LinksScreen from '../screens/LinksScreen';
+import SettingsScreen from '../screens/SettingsScreen';
 
-const HomemadeStack = createStackNavigator({
-  HomemadeWhatIsThisTodo: HomemadeScreen,
+const config = Platform.select({
+  web: { headerMode: 'screen' },
+  default: {},
 });
 
-HomemadeStack.navigationOptions = {
-  tabBarLabel: 'Homemade',
+const HomeStack = createStackNavigator(
+  {
+    Home: HomeScreen,
+  },
+  config
+);
+
+HomeStack.navigationOptions = {
+  tabBarLabel: 'Home',
   tabBarIcon: ({ focused }) => (
     <TabBarIcon
       focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-home' : 'md-home'}
+      name={
+        Platform.OS === 'ios'
+          ? `ios-information-circle${focused ? '' : '-outline'}`
+          : 'md-information-circle'
+      }
     />
   ),
 };
 
-const DineoutStack = createStackNavigator({
-  DineoutWhatIsThisTodo: DineoutScreen,
-});
+HomeStack.path = '';
 
-DineoutStack.navigationOptions = {
-  tabBarLabel: 'Dineout',
+const LinksStack = createStackNavigator(
+  {
+    Links: LinksScreen,
+  },
+  config
+);
+
+LinksStack.navigationOptions = {
+  tabBarLabel: 'Links',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-restaurant' : 'md-restaurant'}
-    />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
   ),
 };
 
-const SuggestionsStack = createStackNavigator({
-  SuggestionsWhatIsThisTodo: SuggestionsScreen,
-});
+LinksStack.path = '';
 
-SuggestionsStack.navigationOptions = {
-  tabBarLabel: 'Delivery',
+const SettingsStack = createStackNavigator(
+  {
+    Settings: SettingsScreen,
+  },
+  config
+);
+
+SettingsStack.navigationOptions = {
+  tabBarLabel: 'Settings',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={Platform.OS === 'ios' ? 'ios-bicycle' : 'md-bicycle'}
-    />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
   ),
 };
 
-export default createBottomTabNavigator({
-  HomemadeStack,
-  DineoutStack,
-  SuggestionsStack,
+SettingsStack.path = '';
+
+const tabNavigator = createBottomTabNavigator({
+  HomeStack,
+  LinksStack,
+  SettingsStack,
 });
+
+tabNavigator.path = '';
+
+export default tabNavigator;
