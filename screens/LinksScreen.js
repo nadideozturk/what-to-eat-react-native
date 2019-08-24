@@ -1,8 +1,42 @@
 import React, { Component } from 'react';
 import { ScrollView, FlatList, StyleSheet, View, Image } from 'react-native';
 import { Container, Content, Card, CardItem, Text, Left, Button, Icon, Body, Right } from 'native-base';
+import { Col, Row, Grid } from 'react-native-easy-grid';
 import CardContent from '../components/OutsideCardContent';
 import MockMeals from '../OutsideMealsMockData.json';
+
+const COLUMNS = 2;
+const itemsToGridArray = (items, totalColumns) => {
+  let gridArray = [[]];
+
+  let countColumns = 1;
+  for (var i = 0; i < items.length; i++) {
+    gridArray[gridArray.length - 1].push(items[i]);
+    if (countColumns <= totalColumns) {
+      countColumns++;
+    }
+    if (countColumns > totalColumns && i !== items.length - 1) {
+      countColumns = 1;
+      gridArray.push([]);
+    }
+  }
+
+  return gridArray;
+}
+
+const renderGrid = (gridArray) => {
+  return gridArray.map(row => (
+    <Row key={`row_${row[0].key}`}>
+      {
+        row.map(col => (
+          <Col key={`col_${col.key}`}>
+            {col}
+          </Col>
+        ))
+      }
+    </Row>
+  ));
+}
 
 export default class LinksScreen extends Component {
   constructor(props, state) {
@@ -21,46 +55,25 @@ export default class LinksScreen extends Component {
   }
 
   render() {
+    const items = this.state.meals.map(meal =>
+      <Card key={meal.id}>
+        <CardItem cardBody>
+          <Image
+            style={{ flex: 1, width: null, height: 200 }}
+            source={{ uri: meal.photoUrl }}
+          />
+        </CardItem>
+        <CardItem>
+          <Body>
+            <Text>{`${meal.name} @ ${meal.restaurantName}`}</Text>
+          </Body>
+        </CardItem>
+      </Card>);
+
     return (
       <Container>
         <Content>
-          {
-            this.state.meals.map(meal =>
-              <Card key={meal.id}>
-                <CardItem>
-                  <Left>
-                    <Body>
-                      <Text>{meal.name}</Text>
-                      <Text note>{meal.restaurantName}</Text>
-                    </Body>
-                  </Left>
-                </CardItem>
-                <CardItem cardBody>
-                  <Image
-                    style={{ flex: 1, width: null, height: 200 }}
-                    source={{ uri: meal.photoUrl }}
-                  />
-                </CardItem>
-                <CardItem>
-                  <Left>
-                    <Button transparent>
-                      <Icon active name="thumbs-up" />
-                      <Text>12 Likes</Text>
-                    </Button>
-                  </Left>
-                  <Body>
-                    <Button transparent>
-                      <Icon active name="chatbubbles" />
-                      <Text>4 Comments</Text>
-                    </Button>
-                  </Body>
-                  <Right>
-                    <Text>11h ago</Text>
-                  </Right>
-                </CardItem>
-              </Card>
-            )
-          }
+          {renderGrid(itemsToGridArray(items, COLUMNS))}
         </Content>
       </Container>
     );
