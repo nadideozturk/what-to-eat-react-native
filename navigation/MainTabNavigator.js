@@ -3,22 +3,22 @@ import { Platform, Image } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
-import HomeScreen from '../screens/HomeScreen';
-import LinksScreen from '../screens/LinksScreen';
+import HomemadeMealsScreen from '../screens/HomemadeMealsScreen';
+import OutsideMealsScreen from '../screens/OutsideMealsScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
   default: {},
 });
 
-const HomeStack = createStackNavigator(
+const HomemadeMealsStack = createStackNavigator(
   {
-    Home: HomeScreen,
+    HomemadeMeals: HomemadeMealsScreen,
   },
   config
 );
 
-HomeStack.navigationOptions = {
+HomemadeMealsStack.navigationOptions = {
   tabBarLabel: 'Cook',
   tabBarIcon: ({ focused }) => (
     <Image
@@ -33,16 +33,16 @@ HomeStack.navigationOptions = {
   ),
 };
 
-HomeStack.path = '';
+HomemadeMealsStack.path = '';
 
-const LinksStack = createStackNavigator(
+const OutsideMealsStack = createStackNavigator(
   {
-    Links: LinksScreen,
+    OutsideMeals: OutsideMealsScreen,
   },
   config
 );
 
-LinksStack.navigationOptions = {
+OutsideMealsStack.navigationOptions = {
   tabBarLabel: 'Order',
   tabBarIcon: ({ focused }) => (
     <Image
@@ -57,11 +57,11 @@ LinksStack.navigationOptions = {
   ),
 };
 
-LinksStack.path = '';
+OutsideMealsStack.path = '';
 
 const tabNavigator = createBottomTabNavigator({
-  HomeStack,
-  LinksStack,
+  HomemadeMealsStack,
+  OutsideMealsStack,
 });
 
 tabNavigator.path = '';
