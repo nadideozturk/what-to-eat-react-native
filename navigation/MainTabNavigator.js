@@ -1,11 +1,10 @@
 import React from 'react';
-import { Platform } from 'react-native';
+import { Platform, Image } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
 import TabBarIcon from '../components/TabBarIcon';
 import HomeScreen from '../screens/HomeScreen';
 import LinksScreen from '../screens/LinksScreen';
-import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -20,15 +19,16 @@ const HomeStack = createStackNavigator(
 );
 
 HomeStack.navigationOptions = {
-  tabBarLabel: 'Home',
+  tabBarLabel: 'Cook',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon
-      focused={focused}
-      name={
-        Platform.OS === 'ios'
-          ? `ios-information-circle${focused ? '' : '-outline'}`
-          : 'md-information-circle'
+    <Image
+      source={
+        focused
+        ? require(`../assets/images/cook-active.png`)
+        : require(`../assets/images/cook-inactive.png`)
       }
+      fadeDuration={0}
+      style={{ marginBottom: -3, width: 26, height: 26 }}
     />
   ),
 };
@@ -43,34 +43,25 @@ const LinksStack = createStackNavigator(
 );
 
 LinksStack.navigationOptions = {
-  tabBarLabel: 'Links',
+  tabBarLabel: 'Order',
   tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-link' : 'md-link'} />
+    <Image
+      source={
+        focused
+        ? require(`../assets/images/order-active.png`)
+        : require(`../assets/images/order-inactive.png`)
+      }
+      fadeDuration={0}
+      style={{ marginBottom: -3, width: 26, height: 26 }}
+    />
   ),
 };
 
 LinksStack.path = '';
 
-const SettingsStack = createStackNavigator(
-  {
-    Settings: SettingsScreen,
-  },
-  config
-);
-
-SettingsStack.navigationOptions = {
-  tabBarLabel: 'Settings',
-  tabBarIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
-  ),
-};
-
-SettingsStack.path = '';
-
 const tabNavigator = createBottomTabNavigator({
   HomeStack,
   LinksStack,
-  SettingsStack,
 });
 
 tabNavigator.path = '';
