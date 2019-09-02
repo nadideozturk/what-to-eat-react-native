@@ -23,13 +23,17 @@ export default class SignInScreen extends React.Component {
   _signInAsync = async () => {
     const config = {
       androidClientId: Config.androidClientId,
+      iosClientId: Config.iosClientId,
     };
 
     // First- obtain access token from Expo's Google API
-    const { type, accessToken, user } = await Google.logInAsync(config);
+    const { type, idToken, user } = await Google.logInAsync(config);
+
+    // console.log("user object is " + JSON.stringify(user));
+    // console.log("logInAsync response: " + JSON.stringify(test));
 
     if (type === 'success') {
-      await AsyncStorage.setItem('userToken', accessToken);
+      await AsyncStorage.setItem('idToken', idToken);
       this.props.navigation.navigate('App');
 
       // Then you can use the Google REST API

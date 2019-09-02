@@ -4,6 +4,10 @@ import { Col, Row } from 'react-native-easy-grid';
 const COLUMNS = 2;
 
 export const itemsToGridArray = (items) => {
+  if (items.length === 0) {
+    return null;
+  }
+
   let gridArray = [[]];
 
   let countColumns = 1;
