@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { ScrollView, FlatList, StyleSheet, View, Image, AsyncStorage } from 'react-native';
+import { ScrollView, FlatList, StyleSheet, View, Image, AsyncStorage, Button as NativeButton } from 'react-native';
 import { Container, Content, Card, CardItem, Text, Left, Button, Icon, Body, Right, Spinner } from 'native-base';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import axios from 'axios';
@@ -13,14 +13,6 @@ export default class HomemadeMealsScreen extends Component {
     this.state = {
       meals: undefined,
     };
-  }
-
-  //Resize the grid
-  onLayout = (event) => {
-    const {width} = event.nativeEvent.layout;
-    const itemWidth = 150;
-    const numColumns = Math.floor(width/itemWidth);
-    this.setState({ numColumns: numColumns });
   }
 
   async componentDidMount() {
@@ -63,13 +55,28 @@ export default class HomemadeMealsScreen extends Component {
     }
     const items = this.state.meals.map(meal =>
       <Card key={meal.id}>
-        <CardItem cardBody>
+        <CardItem
+          cardBody
+          button
+          onPress={() => this.props.navigation.navigate(
+            'HomemadeMealDetails', {
+              meal: meal,
+            })
+          }
+        >
           <Image
             style={{ flex: 1, width: null, height: 200 }}
             source={{ uri: meal.photoUrl }}
           />
         </CardItem>
-        <CardItem>
+        <CardItem
+          button
+          onPress={() => this.props.navigation.navigate(
+            'HomemadeMealDetails', {
+              meal: meal,
+            })
+          }
+        >
           <Body>
             <Text>{`${meal.name}`}</Text>
           </Body>
@@ -88,4 +95,10 @@ export default class HomemadeMealsScreen extends Component {
 
 HomemadeMealsScreen.navigationOptions = {
   title: 'Homemade Meals',
+  headerRight: (
+      <NativeButton
+        onPress={() => alert('Pressed add btn!')}
+        title="New"
+      />
+    ),
 };

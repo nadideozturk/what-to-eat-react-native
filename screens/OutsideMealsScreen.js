@@ -14,14 +14,6 @@ export default class OutsideMealsScreen extends Component {
     };
   }
 
-  //Resize the grid
-  onLayout = (event) => {
-    const {width} = event.nativeEvent.layout;
-    const itemWidth = 150;
-    const numColumns = Math.floor(width/itemWidth);
-    this.setState({ numColumns: numColumns });
-  }
-
   render() {
     const items = this.state.meals.map(meal =>
       <Card key={meal.id}>
