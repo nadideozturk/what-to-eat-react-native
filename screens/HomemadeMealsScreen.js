@@ -1,11 +1,18 @@
 import React, { Component } from 'react';
-import { ScrollView, FlatList, StyleSheet, View, Image, AsyncStorage, Button as NativeButton } from 'react-native';
+import { ScrollView, FlatList, StyleSheet, View, Image, AsyncStorage, Button as NativeButton, Platform } from 'react-native';
 import { Container, Content, Card, CardItem, Text, Left, Button, Icon, Body, Right, Spinner } from 'native-base';
+import IonIcon from 'react-native-vector-icons/Ionicons';
+import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import axios from 'axios';
 import * as GridHelper from '../helpers/GridHelpers';
 import CardContent from '../components/OutsideCardContent';
 import MockMeals from '../OutsideMealsMockData.json';
+
+
+const IoniconsHeaderButton = passMeFurther => (
+  <HeaderButton {...passMeFurther} IconComponent={IonIcon} iconSize={32} color="black" />
+);
 
 export default class HomemadeMealsScreen extends Component {
   constructor(props, state) {
@@ -93,12 +100,15 @@ export default class HomemadeMealsScreen extends Component {
   }
 }
 
-HomemadeMealsScreen.navigationOptions = {
+HomemadeMealsScreen.navigationOptions = ({ navigation }) => ({
   title: 'Homemade Meals',
   headerRight: (
-      <NativeButton
-        onPress={() => alert('Pressed add btn!')}
-        title="New"
+    <HeaderButtons HeaderButtonComponent={IoniconsHeaderButton}>
+      <Item
+        title="+"
+        iconName={Platform.OS === 'ios' ? 'ios-add' : 'md-add'}
+        onPress={() => navigation.navigate('NewHomemadeMeal')}
       />
-    ),
-};
+    </HeaderButtons>
+  ),
+});

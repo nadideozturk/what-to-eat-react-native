@@ -5,6 +5,7 @@ import { createStackNavigator, createBottomTabNavigator } from 'react-navigation
 import TabBarIcon from '../components/TabBarIcon';
 import HomemadeMealsScreen from '../screens/HomemadeMealsScreen';
 import HomemadeMealDetailsScreen from '../screens/HomemadeMealDetailsScreen';
+import NewHomemadeMealScreen from '../screens/NewHomemadeMealScreen';
 import OutsideMealsScreen from '../screens/OutsideMealsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
@@ -17,6 +18,7 @@ const HomemadeMealsStack = createStackNavigator(
   {
     HomemadeMeals: HomemadeMealsScreen,
     HomemadeMealDetails: HomemadeMealDetailsScreen,
+    NewHomemadeMeal: NewHomemadeMealScreen,
   },
   {
     ...config,
