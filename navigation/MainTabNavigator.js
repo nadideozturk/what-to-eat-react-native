@@ -7,6 +7,7 @@ import HomemadeMealsScreen from '../screens/HomemadeMealsScreen';
 import HomemadeMealDetailsScreen from '../screens/HomemadeMealDetailsScreen';
 import NewHomemadeMealScreen from '../screens/NewHomemadeMealScreen';
 import OutsideMealsScreen from '../screens/OutsideMealsScreen';
+import NewOutsideMealScreen from '../screens/NewOutsideMealScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 
 const config = Platform.select({
@@ -46,6 +47,7 @@ HomemadeMealsStack.path = '';
 const OutsideMealsStack = createStackNavigator(
   {
     OutsideMeals: OutsideMealsScreen,
+    NewOutsideMeal: NewOutsideMealScreen, 
   },
   config
 );
