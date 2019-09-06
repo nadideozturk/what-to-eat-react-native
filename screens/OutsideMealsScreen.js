@@ -62,19 +62,33 @@ export default class OutsideMealsScreen extends Component {
     }
     const items = this.state.meals.map(meal =>
       <Card key={meal.id}>
-        <CardItem cardBody>
+        <CardItem
+          cardBody
+          button
+          onPress={() => this.props.navigation.navigate(
+            'OutsideMealDetails', {
+              meal: meal,
+            })
+          }
+        >
           <Image
             style={{ flex: 1, width: null, height: 200 }}
             source={{ uri: meal.photoUrl }}
           />
         </CardItem>
-        <CardItem>
+        <CardItem
+          button
+          onPress={() => this.props.navigation.navigate(
+            'OutsideMealDetails', {
+              meal: meal,
+            })
+          }
+        >
           <Body>
             <Text>{`${meal.name} @ ${meal.restaurantName}`}</Text>
           </Body>
         </CardItem>
       </Card>);
-
     return (
       <Container>
         <Content>
