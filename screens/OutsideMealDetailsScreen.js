@@ -1,9 +1,6 @@
 import React from 'react';
-import {
-  AsyncStorage,
-  View,
-  Text,
-} from 'react-native';
+import { Container, Content, } from 'native-base';
+import OutsideMealDetailCard from '../components/OutsideMealDetailCard';
 
 export default class OutsideMealDetailsScreen extends React.Component {
   static navigationOptions = {
@@ -15,9 +12,11 @@ export default class OutsideMealDetailsScreen extends React.Component {
     const meal = navigation.getParam('meal', '');
 
     return (
-      <View>
-        <Text>Detail Screen for {meal.name}</Text>
-      </View>
+      <Container>
+        <Content>
+          <OutsideMealDetailCard meal={meal} />
+        </Content>
+      </Container>
     );
   }
 }
