@@ -8,10 +8,10 @@ export const itemsToGridArray = (items) => {
     return null;
   }
 
-  let gridArray = [[]];
+  const gridArray = [[]];
 
   let countColumns = 1;
-  for (var i = 0; i < items.length; i++) {
+  for (let i = 0; i < items.length; i++) {
     gridArray[gridArray.length - 1].push(items[i]);
     if (countColumns <= COLUMNS) {
       countColumns++;
@@ -23,18 +23,16 @@ export const itemsToGridArray = (items) => {
   }
 
   return gridArray;
-}
+};
 
-export const renderGrid = (gridArray) => {
-  return gridArray.map(row => (
-    <Row key={`row_${row[0].key}`}>
-      {
-        row.map(col => (
-          <Col key={`col_${col.key}`}>
-            {col}
-          </Col>
-        ))
-      }
-    </Row>
-  ));
-}
+export const renderGrid = (gridArray) => gridArray.map((row) => (
+  <Row key={`row_${row[0].key}`}>
+    {
+      row.map((col) => (
+        <Col key={`col_${col.key}`}>
+          {col}
+        </Col>
+      ))
+    }
+  </Row>
+));

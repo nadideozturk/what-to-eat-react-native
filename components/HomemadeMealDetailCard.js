@@ -1,13 +1,22 @@
 import React from 'react';
-import { AsyncStorage, Image,} from 'react-native';
-import { Container, Header, H3, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
+import { Image } from 'react-native';
+import {
+  Card,
+  CardItem,
+  Text,
+  Button,
+  Icon,
+  Left,
+  Body,
+} from 'native-base';
+import { mealShape } from '../constants/Shapes';
 
-export default class HomemadeMealDetailCard extends React.Component {
+export default class HomemadeMealDetailCard extends React.PureComponent {
   render() {
-    const meal = this.props.meal;
+    const { meal } = this.props;
 
     return (
-      <Card style={{flex: 0}}>
+      <Card style={{ flex: 0 }}>
         <CardItem>
           <Left>
             <Body>
@@ -18,15 +27,15 @@ export default class HomemadeMealDetailCard extends React.Component {
         </CardItem>
         <CardItem>
           <Body>
-            <Image source={{uri: meal.photoUrl}} style={{height: 200, width: 350, flex: 1}}/>
+            <Image source={{ uri: meal.photoUrl }} style={{ height: 200, width: 350, flex: 1 }} />
             <Text>
-              Yemek Tarifi Yemek Tarifi Yemek Tarifi Yemek Tarifi Yemek Tarifi Yemek Tarifi Yemek TarifiYemek Tarifi
+              Yemek Tarifi Yemek Tarifi Yemek Tarifi Yemek Tarifi Yemek Tarifi
             </Text>
           </Body>
         </CardItem>
         <CardItem>
           <Left>
-            <Button transparent textStyle={{color: '#87838B'}}>
+            <Button transparent textStyle={{ color: '#87838B' }}>
               <Icon name="logo-github" />
               <Text>1,926 stars</Text>
             </Button>
@@ -36,3 +45,7 @@ export default class HomemadeMealDetailCard extends React.Component {
     );
   }
 }
+
+HomemadeMealDetailCard.propTypes = {
+  meal: mealShape.isRequired,
+};

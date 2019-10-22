@@ -2,39 +2,24 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
-import { Platform, StatusBar, StyleSheet, View } from 'react-native';
+import {
+  Platform,
+  StatusBar,
+  StyleSheet,
+  View,
+} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
-import { AppFontLoader } from './AppFontLoader';
+import PropTypes from 'prop-types';
+import AppFontLoader from './AppFontLoader';
 
 import AppNavigator from './navigation/AppNavigator';
-
-export default function App(props) {
-  const [isLoadingComplete, setLoadingComplete] = useState(false);
-
-  if (!isLoadingComplete && !props.skipLoadingScreen) {
-    return (
-      <AppLoading
-        startAsync={loadResourcesAsync}
-        onError={handleLoadingError}
-        onFinish={() => handleFinishLoading(setLoadingComplete)}
-      />
-    );
-  } else {
-    return (
-      <AppFontLoader>
-        <View style={styles.container}>
-          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-          <AppNavigator />
-        </View>
-      </AppFontLoader>
-    );
-  }
-}
 
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
+      // eslint-disable-next-line global-require
       require('./assets/images/robot-dev.png'),
+      // eslint-disable-next-line global-require
       require('./assets/images/robot-prod.png'),
     ]),
     Font.loadAsync({
@@ -42,6 +27,7 @@ async function loadResourcesAsync() {
       ...Ionicons.font,
       // We include SpaceMono because we use it in HomeScreen.js. Feel free to
       // remove this if you are not using it in your app
+      // eslint-disable-next-line global-require
       'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     }),
   ]);
@@ -63,3 +49,34 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
 });
+
+export default function App(props) {
+  const [isLoadingComplete, setLoadingComplete] = useState(false);
+  const { skipLoadingScreen } = props;
+
+  if (!isLoadingComplete && !skipLoadingScreen) {
+    return (
+      <AppLoading
+        startAsync={loadResourcesAsync}
+        onError={handleLoadingError}
+        onFinish={() => handleFinishLoading(setLoadingComplete)}
+      />
+    );
+  }
+  return (
+    <AppFontLoader>
+      <View style={styles.container}>
+        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+        <AppNavigator />
+      </View>
+    </AppFontLoader>
+  );
+}
+
+App.propTypes = {
+  skipLoadingScreen: PropTypes.bool,
+};
+
+App.defaultProps = {
+  skipLoadingScreen: false,
+};

@@ -1,11 +1,22 @@
 import React from 'react';
-import { AsyncStorage, Image,} from 'react-native';
-import { Container, Header, H3, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
+import { Image } from 'react-native';
+import {
+  H3,
+  Card,
+  CardItem,
+  Text,
+  Button,
+  Icon,
+  Left,
+  Body,
+  Right,
+} from 'native-base';
+import { mealShape } from '../constants/Shapes';
 
-export default class OutsideMealDetailCard extends React.Component {
+export default class OutsideMealDetailCard extends React.PureComponent {
   render() {
-    const meal = this.props.meal;
-    
+    const { meal } = this.props;
+
     return (
       <Card>
         <CardItem>
@@ -22,7 +33,7 @@ export default class OutsideMealDetailCard extends React.Component {
           </Right>
         </CardItem>
         <CardItem cardBody>
-          <Image source={{uri: meal.photoUrl}} style={{height: 350, width: null, flex: 1}}/>
+          <Image source={{ uri: meal.photoUrl }} style={{ height: 350, width: null, flex: 1 }} />
         </CardItem>
         <CardItem>
           <Left>
@@ -45,3 +56,7 @@ export default class OutsideMealDetailCard extends React.Component {
     );
   }
 }
+
+OutsideMealDetailCard.propTypes = {
+  meal: mealShape.isRequired,
+};

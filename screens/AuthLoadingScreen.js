@@ -3,14 +3,15 @@ import {
   ActivityIndicator,
   AsyncStorage,
   StatusBar,
-  StyleSheet,
   Text,
   View,
 } from 'react-native';
+import { navigationShape } from '../constants/Shapes';
 
 export default class AuthLoadingScreen extends React.Component {
   constructor(props) {
     super(props);
+    // eslint-disable-next-line
     this._bootstrapAsync();
   }
 
@@ -20,7 +21,8 @@ export default class AuthLoadingScreen extends React.Component {
 
     // This will switch to the App screen or Auth screen and this loading
     // screen will be unmounted and thrown away.
-    this.props.navigation.navigate(userToken ? 'App' : 'Auth');
+    const { navigation } = this.props;
+    navigation.navigate(userToken ? 'App' : 'Auth');
   };
 
   // Render any loading content that you like here
@@ -34,3 +36,7 @@ export default class AuthLoadingScreen extends React.Component {
     );
   }
 }
+
+AuthLoadingScreen.propTypes = {
+  navigation: navigationShape.isRequired,
+};

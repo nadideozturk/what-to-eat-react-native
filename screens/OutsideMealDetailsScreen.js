@@ -1,6 +1,7 @@
 import React from 'react';
-import { Container, Content, } from 'native-base';
+import { Container, Content } from 'native-base';
 import OutsideMealDetailCard from '../components/OutsideMealDetailCard';
+import { navigationShape } from '../constants/Shapes';
 
 export default class OutsideMealDetailsScreen extends React.Component {
   static navigationOptions = {
@@ -20,3 +21,7 @@ export default class OutsideMealDetailsScreen extends React.Component {
     );
   }
 }
+
+OutsideMealDetailsScreen.propTypes = {
+  navigation: navigationShape.isRequired,
+};

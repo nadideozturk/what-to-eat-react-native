@@ -1,18 +1,23 @@
 import React from 'react';
 import { AppLoading } from 'expo';
 import * as Font from 'expo-font';
+import PropTypes from 'prop-types';
 
-class AppFontLoader extends React.Component {
-
-  state = {
-    fontLoaded: false
-  };
+export default class AppFontLoader extends React.Component {
+  constructor(props, state) {
+    super(props, state);
+    this.state = {
+      fontLoaded: false,
+    };
+  }
 
   async componentWillMount() {
     try {
       await Font.loadAsync({
-        Roboto: require("native-base/Fonts/Roboto.ttf"),
-        Roboto_medium: require("native-base/Fonts/Roboto_medium.ttf")
+        // eslint-disable-next-line global-require
+        Roboto: require('native-base/Fonts/Roboto.ttf'),
+        // eslint-disable-next-line global-require
+        Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
       });
       this.setState({ fontLoaded: true });
     } catch (error) {
@@ -21,11 +26,16 @@ class AppFontLoader extends React.Component {
   }
 
   render() {
-    if (!this.state.fontLoaded) {
+    const { fontLoaded } = this.state;
+    const { children } = this.props;
+
+    if (!fontLoaded) {
       return <AppLoading />;
     }
-    return this.props.children;
+    return children;
   }
 }
 
-export { AppFontLoader };
+AppFontLoader.propTypes = {
+  children: PropTypes.element.isRequired,
+};

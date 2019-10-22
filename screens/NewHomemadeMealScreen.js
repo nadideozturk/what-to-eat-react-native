@@ -1,6 +1,5 @@
 import React from 'react';
 import {
-  AsyncStorage,
   View,
   Text,
 } from 'react-native';
