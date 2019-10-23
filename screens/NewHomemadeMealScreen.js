@@ -9,9 +9,18 @@ import {
   Text,
   Spinner,
 } from 'native-base';
+import { Image } from 'react-native';
 import {
   Formik,
 } from 'formik';
+import * as ImagePicker from 'expo-image-picker';
+
+const imagePickerOptions = {
+  // todo test video
+  allowsEditing: true,
+  aspect: [1, 1],
+  // quality
+};
 
 export default class NewHomemadeMealScreen extends React.Component {
   static navigationOptions = {
@@ -23,7 +32,7 @@ export default class NewHomemadeMealScreen extends React.Component {
       <Container>
         <Content>
           <Formik
-            initialValues={{ mealName: '', photoUrl: '' }}
+            initialValues={{ mealName: '', photoUrl: '', photoLocalUri: '' }}
             validate={() => {
               const errors = {};
               // if (!values.mealName) {
@@ -41,33 +50,48 @@ export default class NewHomemadeMealScreen extends React.Component {
               }, 2000);
             }}
           >
-            {(props) => (
+            {({
+              handleChange,
+              handleBlur,
+              handleSubmit,
+              values,
+              isSubmitting,
+            }) => (
               <Form>
                 <Item>
                   <Input
                     placeholder="Meal name"
-                    onBlur={props.handleBlur('mealName')}
-                    onChangeText={props.handleChange('mealName')}
-                    value={props.values.mealName}
+                    onBlur={handleBlur('mealName')}
+                    onChangeText={handleChange('mealName')}
+                    value={values.mealName}
                   />
                 </Item>
                 <Item last>
                   <Input
                     placeholder="Duration"
-                    onBlur={props.handleBlur('duration')}
-                    onChangeText={props.handleChange('duration')}
-                    value={props.values.duration}
+                    onBlur={handleBlur('duration')}
+                    onChangeText={handleChange('duration')}
+                    value={values.duration}
                   />
                 </Item>
-                {props.isSubmitting ? (
-                  <Spinner color="red" />
-                ) : (
-                  <Button
-                    onPress={props.handleSubmit}
-                  >
-                    <Text>Create</Text>
-                  </Button>
-                )}
+                <Button
+                  onPress={async () => {
+                    const result = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
+                    if (result.cancelled) {
+                      console.log('cancelled');
+                      return;
+                    }
+                    handleChange('image')(result.uri);
+                  }}
+                >
+                  <Text>Choose Image</Text>
+                </Button>
+                {values.image
+                  ? <Image source={{ uri: values.image }} style={{ width: 200, height: 200 }} />
+                  : null}
+                {isSubmitting
+                  ? (<Spinner color="red" />)
+                  : (<Button onPress={handleSubmit}><Text>Create</Text></Button>)}
               </Form>
             )}
           </Formik>
