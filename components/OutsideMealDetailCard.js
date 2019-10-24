@@ -28,7 +28,7 @@ export default class OutsideMealDetailCard extends React.PureComponent {
           </Left>
           <Right>
             <Body>
-              <Text note>{meal.lastEatenDate}</Text>
+              <Text note>Example last eaten date</Text>
             </Body>
           </Right>
         </CardItem>

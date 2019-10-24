@@ -23,6 +23,7 @@
     "expo-constants": "^5.0.0",
     "expo-font": "^5.0.1",
     "expo-google-app-auth": "^6.0.0",
+    "expo-image-picker": "~5.0.2",
     "expo-web-browser": "^5.0.0",
     "formik": "^1.5.8",
     "native-base": "^2.13.5",
@@ -34,8 +35,7 @@
     "react-native-vector-icons": "^6.6.0",
     "react-native-web": "^0.11.4",
     "react-navigation": "^3.11.0",
-    "react-navigation-header-buttons": "^3.0.2",
-    "expo-image-picker": "~5.0.2"
+    "react-navigation-header-buttons": "^3.0.2"
   },
   "devDependencies": {
     "babel-preset-expo": "^5.1.0",

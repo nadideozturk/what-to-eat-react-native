@@ -27,12 +27,24 @@ const IoniconsHeaderButton = (passMeFurther) => (
 export default class HomemadeMealsScreen extends Component {
   constructor(props, state) {
     super(props, state);
+    this.fetchData = this.fetchData.bind(this);
     this.state = {
       meals: undefined,
     };
   }
 
   async componentDidMount() {
+    await this.fetchData();
+    const { navigation } = this.props;
+    this.willFocusSubscription = navigation.addListener(
+      'willFocus',
+      () => {
+        this.fetchData();
+      },
+    );
+  }
+
+  async fetchData() {
     axios.get(
       'http://ec2-13-58-5-77.us-east-2.compute.amazonaws.com:8080/homemademeals',
       {
