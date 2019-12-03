@@ -9,7 +9,7 @@ import {
   Text,
   Spinner,
 } from 'native-base';
-import { Image, AsyncStorage } from 'react-native';
+import { Image, TouchableOpacity, AsyncStorage } from 'react-native';
 import {
   Formik,
 } from 'formik';
@@ -98,6 +98,18 @@ function uploadFile(file) {
 }
 
 export default class NewHomemadeMealScreen extends React.Component {
+  constructor(props) {
+    super(props);
+    this.imagePickerButtonRef = React.createRef();
+    this.firstInputRef = React.createRef();
+  }
+
+  componentDidMount() {
+    if (this.imagePickerButtonRef.current) {
+      this.imagePickerButtonRef.current.touchableHandlePress();
+    }
+  }
+
   static navigationOptions = {
     title: 'New Homemade Meal ',
   };
@@ -167,6 +179,7 @@ export default class NewHomemadeMealScreen extends React.Component {
               <Form>
                 <Item>
                   <Input
+                    ref={this.firstInputRef}
                     placeholder="Meal name"
                     onBlur={handleBlur('mealName')}
                     onChangeText={handleChange('mealName')}
@@ -181,26 +194,32 @@ export default class NewHomemadeMealScreen extends React.Component {
                     value={values.duration}
                   />
                 </Item>
-                <Button
+                <TouchableOpacity
+                  style={{ alignSelf: 'flex-start' }}
+                  ref={this.imagePickerButtonRef}
                   onPress={async () => {
-                    const response = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
+                    const response =
+                      await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
                     if (response.cancelled) {
                       console.log('cancelled');
                       return;
                     }
                     handleChange('imageFile')(response);
+                    if (this.firstInputRef.current) {
+                      // eslint-disable-next-line
+                      this.firstInputRef.current._root._inputRef.focus();
+                    }
                   }}
                 >
-                  <Text>Choose Image</Text>
-                </Button>
-                {values.imageFile
-                  ? (
-                    <Image
-                      source={{ uri: values.imageFile.uri }}
-                      style={{ width: 200, height: 200 }}
-                    />
-                  )
-                  : null}
+                  {values.imageFile
+                    ? (
+                      <Image
+                        source={{ uri: values.imageFile.uri }}
+                        style={{ width: 200, height: 200 }}
+                      />
+                    )
+                    : null}
+                </TouchableOpacity>
                 {isSubmitting
                   ? (<Spinner color="red" />)
                   : (<Button onPress={handleSubmit}><Text>Create</Text></Button>)}
