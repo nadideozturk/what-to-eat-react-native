@@ -14,6 +14,8 @@ import {
   Formik,
 } from 'formik';
 import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import { navigationShape } from '../constants/Shapes';
 
@@ -104,10 +106,24 @@ export default class NewHomemadeMealScreen extends React.Component {
     this.firstInputRef = React.createRef();
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     if (this.imagePickerButtonRef.current) {
-      this.imagePickerButtonRef.current.touchableHandlePress();
+      const hasPermission = await this.getPermissionAsync();
+      if (hasPermission) {
+        this.imagePickerButtonRef.current.touchableHandlePress();
+      }
     }
+  }
+
+  getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('You won\'t be able to specify the image of the meal.');
+        return false;
+      }
+    }
+    return true;
   }
 
   static navigationOptions = {
