@@ -11,7 +11,7 @@ export default class AppFontLoader extends React.Component {
     };
   }
 
-  async componentWillMount() {
+  async componentDidMount() {
     try {
       await Font.loadAsync({
         // eslint-disable-next-line global-require
