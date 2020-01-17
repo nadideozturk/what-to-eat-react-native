@@ -14,8 +14,6 @@ import {
   Formik,
 } from 'formik';
 import * as ImagePicker from 'expo-image-picker';
-import Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions';
 import axios from 'axios';
 import { navigationShape } from '../constants/Shapes';
 
@@ -108,22 +106,8 @@ export default class NewHomemadeMealScreen extends React.Component {
 
   async componentDidMount() {
     if (this.imagePickerButtonRef.current) {
-      const hasPermission = await this.getPermissionAsync();
-      if (hasPermission) {
-        this.imagePickerButtonRef.current.touchableHandlePress();
-      }
+      this.imagePickerButtonRef.current.touchableHandlePress();
     }
-  }
-
-  getPermissionAsync = async () => {
-    if (Constants.platform.ios) {
-      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
-      if (status !== 'granted') {
-        alert('You won\'t be able to specify the image of the meal.');
-        return false;
-      }
-    }
-    return true;
   }
 
   static navigationOptions = {
@@ -214,8 +198,7 @@ export default class NewHomemadeMealScreen extends React.Component {
                   style={{ alignSelf: 'flex-start' }}
                   ref={this.imagePickerButtonRef}
                   onPress={async () => {
-                    const response =
-                      await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
+                    const response = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
                     if (response.cancelled) {
                       console.log('cancelled');
                       return;

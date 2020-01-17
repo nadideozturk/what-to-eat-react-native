@@ -23,6 +23,14 @@ module.exports = {
   ],
   rules: {
     "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
-    'no-plusplus': 'off'
+    'no-plusplus': 'off',
+    'jsx-a11y/accessible-emoji': 'off',
+    'max-len': ['error', 180, 2, {
+      ignoreUrls: true,
+      ignoreComments: false,
+      ignoreRegExpLiterals: true,
+      ignoreStrings: false,
+      ignoreTemplateLiterals: false,
+    }],
   },
 };

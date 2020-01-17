@@ -9,6 +9,7 @@ import OutsideMealsScreen from '../screens/OutsideMealsScreen';
 import NewOutsideMealScreen from '../screens/NewOutsideMealScreen';
 import OutsideMealDetailsScreen from '../screens/OutsideMealDetailsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import CameraRollPermissionRequestScreen from '../screens/CameraRollPermissionRequestScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -20,6 +21,7 @@ const HomemadeMealsStack = createStackNavigator(
     HomemadeMeals: HomemadeMealsScreen,
     HomemadeMealDetails: HomemadeMealDetailsScreen,
     NewHomemadeMeal: NewHomemadeMealScreen,
+    CameraRollPermission: CameraRollPermissionRequestScreen,
   },
   {
     ...config,
@@ -52,6 +54,7 @@ const OutsideMealsStack = createStackNavigator(
     OutsideMeals: OutsideMealsScreen,
     NewOutsideMeal: NewOutsideMealScreen,
     OutsideMealDetails: OutsideMealDetailsScreen,
+    CameraRollPermission: CameraRollPermissionRequestScreen,
   },
   config,
 );

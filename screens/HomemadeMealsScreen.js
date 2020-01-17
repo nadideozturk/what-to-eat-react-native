@@ -16,6 +16,8 @@ import {
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
 import axios from 'axios';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
 import * as GridHelper from '../helpers/GridHelpers';
 import { navigationShape } from '../constants/Shapes';
 
@@ -128,6 +130,16 @@ export default class HomemadeMealsScreen extends Component {
   }
 }
 
+const getPermissionAsync = async () => {
+  if (Constants.platform.ios) {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status !== 'granted') {
+      return false;
+    }
+  }
+  return true;
+};
+
 HomemadeMealsScreen.navigationOptions = ({ navigation }) => ({
   title: 'Homemade Meals',
   headerRight: (
@@ -135,7 +147,12 @@ HomemadeMealsScreen.navigationOptions = ({ navigation }) => ({
       <Item
         title="+"
         iconName={Platform.OS === 'ios' ? 'ios-add' : 'md-add'}
-        onPress={() => navigation.navigate('NewHomemadeMeal')}
+        onPress={async () => {
+          if (await getPermissionAsync()) {
+            return navigation.navigate('NewHomemadeMeal');
+          }
+          return navigation.navigate('CameraRollPermission');
+        }}
       />
     </HeaderButtons>
   ),
