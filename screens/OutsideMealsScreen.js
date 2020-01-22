@@ -16,6 +16,8 @@ import {
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
 import axios from 'axios';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
 import * as GridHelper from '../helpers/GridHelpers';
 import { navigationShape } from '../constants/Shapes';
 
@@ -113,6 +115,16 @@ export default class OutsideMealsScreen extends Component {
   }
 }
 
+const getPermissionAsync = async () => {
+  if (Constants.platform.ios) {
+    const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+    if (status !== 'granted') {
+      return false;
+    }
+  }
+  return true;
+};
+
 OutsideMealsScreen.navigationOptions = ({ navigation }) => ({
   title: 'Outside Meals',
   headerRight: (
@@ -120,7 +132,12 @@ OutsideMealsScreen.navigationOptions = ({ navigation }) => ({
       <Item
         title="+"
         iconName={Platform.OS === 'ios' ? 'ios-add' : 'md-add'}
-        onPress={() => navigation.navigate('NewOutsideMeal')}
+        onPress={async () => {
+          if (await getPermissionAsync()) {
+            return navigation.navigate('NewOutsideMeal');
+          }
+          return navigation.navigate('CameraRollPermissionOut');
+        }}
       />
     </HeaderButtons>
   ),
