@@ -16,6 +16,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import { navigationShape } from '../constants/Shapes';
+import NumericInput from '../components/NumericInput';
 
 const imagePickerOptions = {
   // todo test video
@@ -128,7 +129,7 @@ export default class NewOutsideMealScreen extends React.Component {
                     name: values.mealName,
                     photoUrl,
                     catId: 'defaultCategory',
-                    price: 50,
+                    price: parseFloat(values.price),
                     restaurantName: values.restaurantName,
                   };
                   return axios.post(
@@ -180,7 +181,7 @@ export default class NewOutsideMealScreen extends React.Component {
                   />
                 </Item>
                 <Item last>
-                  <Input
+                  <NumericInput
                     placeholder="Price"
                     onBlur={handleBlur('price')}
                     onChangeText={handleChange('price')}
