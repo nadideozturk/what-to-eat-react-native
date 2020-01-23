@@ -35,6 +35,17 @@ export default class OutsideMealsScreen extends Component {
   }
 
   async componentDidMount() {
+    await this.fetchData();
+    const { navigation } = this.props;
+    this.willFocusSubscription = navigation.addListener(
+      'willFocus',
+      () => {
+        this.fetchData();
+      },
+    );
+  }
+
+  async fetchData() {
     axios.get(
       'http://ec2-13-58-5-77.us-east-2.compute.amazonaws.com:8080/outsidemeals',
       {
