@@ -178,11 +178,43 @@ export default class NewHomemadeMealScreen extends React.Component {
             }) => (
               <Form>
                 <Item>
+                  <TouchableOpacity
+                    style={{
+                      alignSelf: 'flex-start',
+                      paddingRight: 7,
+                      paddingLeft: 7,
+                      paddingTop: 10,
+                      paddingBottom: 10,
+                    }}
+                    ref={this.imagePickerButtonRef}
+                    onPress={async () => {
+                      const response = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
+                      if (response.cancelled) {
+                        console.log('cancelled');
+                        return;
+                      }
+                      handleChange('imageFile')(response);
+                      if (this.firstInputRef.current) {
+                        // eslint-disable-next-line
+                        this.firstInputRef.current._root._inputRef.focus();
+                      }
+                    }}
+                  >
+                    {values.imageFile
+                      ? (
+                        <Image
+                          source={{ uri: values.imageFile.uri }}
+                          style={{ height: 60, width: 60 }}
+                        />
+                      )
+                      : null}
+                  </TouchableOpacity>
                   <Input
                     ref={this.firstInputRef}
                     placeholder="Meal name"
                     onBlur={handleBlur('mealName')}
                     onChangeText={handleChange('mealName')}
+                    style={{ alignSelf: 'flex-start' }}
                     value={values.mealName}
                   />
                 </Item>
@@ -194,31 +226,6 @@ export default class NewHomemadeMealScreen extends React.Component {
                     value={values.duration}
                   />
                 </Item>
-                <TouchableOpacity
-                  style={{ alignSelf: 'flex-start' }}
-                  ref={this.imagePickerButtonRef}
-                  onPress={async () => {
-                    const response = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
-                    if (response.cancelled) {
-                      console.log('cancelled');
-                      return;
-                    }
-                    handleChange('imageFile')(response);
-                    if (this.firstInputRef.current) {
-                      // eslint-disable-next-line
-                      this.firstInputRef.current._root._inputRef.focus();
-                    }
-                  }}
-                >
-                  {values.imageFile
-                    ? (
-                      <Image
-                        source={{ uri: values.imageFile.uri }}
-                        style={{ width: 200, height: 200 }}
-                      />
-                    )
-                    : null}
-                </TouchableOpacity>
                 {isSubmitting
                   ? (<Spinner color="red" />)
                   : (<Button onPress={handleSubmit}><Text>Create</Text></Button>)}
