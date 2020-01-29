@@ -9,6 +9,7 @@ import OutsideMealsScreen from '../screens/OutsideMealsScreen';
 import NewOutsideMealScreen from '../screens/NewOutsideMealScreen';
 import OutsideMealDetailsScreen from '../screens/OutsideMealDetailsScreen';
 import SettingsScreen from '../screens/SettingsScreen';
+import ExploreScreen from '../screens/ExploreScreen';
 import CameraRollPermissionRequestScreen from '../screens/CameraRollPermissionRequestScreen';
 import CameraRollPermissionRequestOutScreen from '../screens/CameraRollPermissionRequestOutScreen';
 
@@ -80,6 +81,33 @@ OutsideMealsStack.navigationOptions = {
 
 OutsideMealsStack.path = '';
 
+const ExploreStack = createStackNavigator(
+  {
+    Explore: ExploreScreen,
+  },
+  config,
+);
+
+ExploreStack.navigationOptions = {
+  tabBarLabel: 'Explore',
+  // eslint-disable-next-line react/prop-types
+  tabBarIcon: ({ focused }) => (
+    <Image
+      source={
+        focused
+          // eslint-disable-next-line global-require
+          ? require('../assets/images/search-active.png')
+          // eslint-disable-next-line global-require
+          : require('../assets/images/search-inactive.png')
+      }
+      fadeDuration={0}
+      style={{ marginBottom: -3, width: 26, height: 26 }}
+    />
+  ),
+};
+
+ExploreStack.path = '';
+
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
@@ -110,6 +138,7 @@ SettingsStack.path = '';
 const tabNavigator = createBottomTabNavigator({
   HomemadeMealsStack,
   OutsideMealsStack,
+  ExploreStack,
   SettingsStack,
 });
 
