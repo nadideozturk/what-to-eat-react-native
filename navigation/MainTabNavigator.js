@@ -95,9 +95,9 @@ SettingsStack.navigationOptions = {
       source={
         focused
           // eslint-disable-next-line global-require
-          ? require('../assets/images/order-active.png')
+          ? require('../assets/images/settings-active.png')
           // eslint-disable-next-line global-require
-          : require('../assets/images/order-inactive.png')
+          : require('../assets/images/settings-inactive.png')
       }
       fadeDuration={0}
       style={{ marginBottom: -3, width: 26, height: 26 }}
