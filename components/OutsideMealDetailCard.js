@@ -39,13 +39,13 @@ export default class OutsideMealDetailCard extends React.PureComponent {
           <Left>
             <Button transparent>
               <Icon active name="chatbubbles" />
-              <Text>12 Likes</Text>
+              <Text>12</Text>
             </Button>
           </Left>
           <Body>
             <Button transparent>
               <Icon active name="chatbubbles" />
-              <Text>4 Comments</Text>
+              <Text>4</Text>
             </Button>
           </Body>
           <Right>

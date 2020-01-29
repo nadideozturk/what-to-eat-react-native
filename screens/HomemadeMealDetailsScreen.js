@@ -1,11 +1,11 @@
 import React from 'react';
-import { Container, Header, Content } from 'native-base';
+import { Container, Content } from 'native-base';
 import HomemadeMealDetailCard from '../components/HomemadeMealDetailCard';
 import { navigationShape } from '../constants/Shapes';
 
 export default class HomemadeMealDetailsScreen extends React.Component {
   static navigationOptions = {
-    title: 'Detail',
+    title: 'Homemade Post',
   };
 
   render() {
@@ -13,8 +13,9 @@ export default class HomemadeMealDetailsScreen extends React.Component {
     const meal = navigation.getParam('meal', '');
 
     return (
-      <Container>
-        <Header />
+      <Container
+        style={{ marginTop: -5, marginLeft: -3, marginRight: -3 }}
+      >
         <Content>
           <HomemadeMealDetailCard meal={meal} />
         </Content>

@@ -8,39 +8,40 @@ import {
   Icon,
   Left,
   Body,
+  Right,
+  Thumbnail,
 } from 'native-base';
 import { mealShape } from '../constants/Shapes';
+import Recipe from './Recipe';
 
 export default class HomemadeMealDetailCard extends React.PureComponent {
   render() {
     const { meal } = this.props;
 
     return (
-      <Card style={{ flex: 0 }}>
+      <Card>
         <CardItem>
           <Left>
+            <Thumbnail
+              small
+              source={{ uri: 'https://lh3.googleusercontent.com/a-/AAuE7mBiYdQO-W32CcREhzqJ8tH1XfM_R7JPaktervK3' }}
+              style={{ marginLeft: -6 }}
+            />
             <Body>
               <Text>{meal.name}</Text>
-              <Text note>April 15, 2016</Text>
+              <Text note>11 hour ago</Text>
             </Body>
           </Left>
-        </CardItem>
-        <CardItem>
-          <Body>
-            <Image source={{ uri: meal.photoUrl }} style={{ height: 200, width: 350, flex: 1 }} />
-            <Text>
-              Yemek Tarifi Yemek Tarifi Yemek Tarifi Yemek Tarifi Yemek Tarifi
-            </Text>
-          </Body>
-        </CardItem>
-        <CardItem>
-          <Left>
-            <Button transparent textStyle={{ color: '#87838B' }}>
-              <Icon name="logo-github" />
-              <Text>1,926 stars</Text>
+          <Right>
+            <Button transparent>
+              <Icon name="ios-more" style={{ fontSize: 25, color: 'black' }} />
             </Button>
-          </Left>
+          </Right>
         </CardItem>
+        <CardItem cardBody>
+          <Image source={{ uri: meal.photoUrl }} style={{ height: 350, width: null, flex: 1 }} />
+        </CardItem>
+        <Recipe />
       </Card>
     );
   }
