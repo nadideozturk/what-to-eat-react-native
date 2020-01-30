@@ -13,7 +13,9 @@ export default class OutsideMealDetailsScreen extends React.Component {
     const meal = navigation.getParam('meal', '');
 
     return (
-      <Container>
+      <Container
+        style={{ marginTop: -5, marginLeft: -3, marginRight: -3 }}
+      >
         <Content>
           <OutsideMealDetailCard meal={meal} />
         </Content>

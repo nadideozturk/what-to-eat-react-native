@@ -1,7 +1,6 @@
 import React from 'react';
 import { Image } from 'react-native';
 import {
-  H3,
   Card,
   CardItem,
   Text,
@@ -10,6 +9,7 @@ import {
   Left,
   Body,
   Right,
+  Thumbnail,
 } from 'native-base';
 import { mealShape } from '../constants/Shapes';
 
@@ -21,15 +21,20 @@ export default class OutsideMealDetailCard extends React.PureComponent {
       <Card>
         <CardItem>
           <Left>
+            <Thumbnail
+              small
+              source={{ uri: 'https://lh3.googleusercontent.com/a-/AAuE7mBiYdQO-W32CcREhzqJ8tH1XfM_R7JPaktervK3' }}
+              style={{ marginLeft: -6 }}
+            />
             <Body>
-              <Text><H3>{meal.name}</H3></Text>
-              <Text>{meal.restaurantName}</Text>
+              <Text>{meal.name}</Text>
+              <Text note>{meal.restaurantName}</Text>
             </Body>
           </Left>
           <Right>
-            <Body>
-              <Text note>Example last eaten date</Text>
-            </Body>
+            <Button transparent>
+              <Icon name="ios-more" style={{ fontSize: 25, color: 'black' }} />
+            </Button>
           </Right>
         </CardItem>
         <CardItem cardBody>
@@ -37,19 +42,13 @@ export default class OutsideMealDetailCard extends React.PureComponent {
         </CardItem>
         <CardItem>
           <Left>
-            <Button transparent>
-              <Icon active name="chatbubbles" />
-              <Text>12</Text>
-            </Button>
+            <Text>11 hour ago</Text>
           </Left>
-          <Body>
-            <Button transparent>
-              <Icon active name="chatbubbles" />
-              <Text>4</Text>
-            </Button>
-          </Body>
           <Right>
-            <Text>11h ago</Text>
+            <Text>
+              {meal.price}
+               CAD
+            </Text>
           </Right>
         </CardItem>
       </Card>
