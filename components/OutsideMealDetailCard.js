@@ -13,6 +13,8 @@ import {
 } from 'native-base';
 import { mealShape } from '../constants/Shapes';
 
+const defaultMealImageUrl = 'https://res.cloudinary.com/dv0qmj6vt/image/upload/v1571892846/hbc79s2xpvxnxsbnsbwe.jpg';
+
 export default class OutsideMealDetailCard extends React.PureComponent {
   render() {
     const { meal } = this.props;
@@ -38,7 +40,7 @@ export default class OutsideMealDetailCard extends React.PureComponent {
           </Right>
         </CardItem>
         <CardItem cardBody>
-          <Image source={{ uri: meal.photoUrl }} style={{ height: 350, width: null, flex: 1 }} />
+          <Image source={{ uri: meal.photoUrl || defaultMealImageUrl }} style={{ height: 350, width: null, flex: 1 }} />
         </CardItem>
         <CardItem>
           <Left>

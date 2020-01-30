@@ -21,6 +21,7 @@ import * as Permissions from 'expo-permissions';
 import * as GridHelper from '../helpers/GridHelpers';
 import { navigationShape } from '../constants/Shapes';
 
+const defaultMealImageUrl = 'https://res.cloudinary.com/dv0qmj6vt/image/upload/v1571892846/hbc79s2xpvxnxsbnsbwe.jpg';
 const IoniconsHeaderButton = (passMeFurther) => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <HeaderButton {...passMeFurther} IconComponent={IonIcon} iconSize={32} color="black" />
@@ -99,7 +100,7 @@ export default class OutsideMealsScreen extends Component {
         >
           <Image
             style={{ flex: 1, width: null, height: 200 }}
-            source={{ uri: meal.photoUrl }}
+            source={{ uri: meal.photoUrl || defaultMealImageUrl }}
           />
         </CardItem>
         <CardItem
