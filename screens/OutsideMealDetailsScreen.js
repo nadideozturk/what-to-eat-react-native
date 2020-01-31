@@ -1,5 +1,5 @@
 import React from 'react';
-import { Container, Content } from 'native-base';
+import { Container, Content, Root } from 'native-base';
 import OutsideMealDetailCard from '../components/OutsideMealDetailCard';
 import { navigationShape } from '../constants/Shapes';
 
@@ -13,13 +13,18 @@ export default class OutsideMealDetailsScreen extends React.Component {
     const meal = navigation.getParam('meal', '');
 
     return (
-      <Container
-        style={{ marginTop: -5, marginLeft: -3, marginRight: -3 }}
-      >
-        <Content>
-          <OutsideMealDetailCard meal={meal} />
-        </Content>
-      </Container>
+      <Root>
+        <Container
+          style={{ marginTop: -5, marginLeft: -3, marginRight: -3 }}
+        >
+          <Content>
+            <OutsideMealDetailCard
+              meal={meal}
+              navigation={navigation}
+            />
+          </Content>
+        </Container>
+      </Root>
     );
   }
 }
