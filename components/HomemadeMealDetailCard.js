@@ -88,6 +88,10 @@ export default class HomemadeMealDetailCard extends React.PureComponent {
                       ],
                       { cancelable: false },
                     );
+                  } else if (buttonIndex === 1) {
+                    // go to edit screen
+                    const { navigation } = this.props;
+                    navigation.navigate('EditHomemadeMeal', { meal });
                   }
                 },
               )}

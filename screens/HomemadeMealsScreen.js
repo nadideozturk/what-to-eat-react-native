@@ -61,6 +61,7 @@ export default class HomemadeMealsScreen extends Component {
         this.setState({
           meals: response.data,
         });
+        // console.log(response.data);
       })
       .catch((error) => {
         console.log(error);

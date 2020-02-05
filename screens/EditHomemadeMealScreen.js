@@ -16,6 +16,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import { navigationShape } from '../constants/Shapes';
+import NumericInput from '../components/NumericInput';
 
 const imagePickerOptions = {
   // todo test video
@@ -52,7 +53,7 @@ function uploadFile(file) {
     const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
     const xhr = new XMLHttpRequest();
     const fd = new FormData();
-    xhr.open('POST', url, true);
+    xhr.open('PUT', url, true);
     // xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
     // xhr.setRequestHeader('Content-Type', 'multipart/form-data');
 
@@ -97,33 +98,24 @@ function uploadFile(file) {
   });
 }
 
-export default class NewHomemadeMealScreen extends React.Component {
-  constructor(props) {
-    super(props);
-    this.imagePickerButtonRef = React.createRef();
-    this.firstInputRef = React.createRef();
-  }
-
-  async componentDidMount() {
-    if (this.imagePickerButtonRef.current) {
-      this.imagePickerButtonRef.current.touchableHandlePress();
-    }
-  }
-
+export default class EditHomemadeMealScreen extends React.Component {
   static navigationOptions = {
-    title: 'New Homemade Meal ',
+    title: 'Edit',
   };
 
   render() {
+    const { navigation } = this.props;
+    const meal = navigation.getParam('meal', '');
+
     return (
       <Container>
         <Content>
           <Formik
             initialValues={{
-              mealName: '',
-              photoUrl: '',
-              imageFile: '',
-              duration: '',
+              mealName: meal.name,
+              photoUrl: meal.photoUrl,
+              imageFile: meal.imageFile,
+              durationInMinutes: String(meal.durationInMinutes),
             }}
             validate={() => {
               const errors = {};
@@ -135,44 +127,38 @@ export default class NewHomemadeMealScreen extends React.Component {
               // }
               return errors;
             }}
-            onSubmit={(values, actions) => {
-              uploadFile(values.imageFile)
-                .then((xhrResponse) => {
-                  // console.log('xhrResponse.target.response');
-                  // console.log(xhrResponse.target.response);
-                  const responseUrl = JSON.parse(xhrResponse.target.response).secure_url;
-                  // console.log(`Successfully uploaded to ${responseUrl}`);
-                  return responseUrl;
-                })
-                .then(async (photoUrl) => {
-                  // alert(`upload successful, ${photoUrl}`);
-                  const meal = {
-                    name: values.mealName,
-                    photoUrl,
-                    catId: 'defaultCategory',
-                    durationInMinutes: values.duration,
-                  };
-                  return axios.post(
-                    'http://ec2-13-58-5-77.us-east-2.compute.amazonaws.com:8080/homemademeals',
-                    meal,
-                    {
-                      headers: {
-                        Authorization: await AsyncStorage.getItem('idToken'),
-                      },
+            onSubmit={async (values, actions) => {
+              try {
+                let { photoUrl } = meal;
+                if (values.imageFile) {
+                  const xhrResponse = await uploadFile(values.imageFile);
+                  photoUrl = JSON.parse(xhrResponse.target.response).secure_url;
+                }
+                const uploadedMeal = {
+                  ...meal,
+                  name: values.mealName,
+                  photoUrl,
+                  catId: 'defaultCategory',
+                  durationInMinutes: Number(values.durationInMinutes),
+                  photoContent: 'Empty',
+                };
+                console.log(uploadedMeal);
+                console.log(meal);
+                await axios.put(
+                  'http://ec2-13-58-5-77.us-east-2.compute.amazonaws.com:8080/homemademeals',
+                  uploadedMeal,
+                  {
+                    headers: {
+                      Authorization: await AsyncStorage.getItem('idToken'),
                     },
-                  );
-                })
-                .then(() => {
-                  const { navigation } = this.props;
-                  actions.setSubmitting(false);
-                  navigation.goBack();
-                })
-                .catch((error) => {
-                  // console.log('error.response');
-                  // console.log(error.response);
-                  alert(`upload failed, ${error}`);
-                  actions.setSubmitting(false);
-                });
+                  },
+                );
+                actions.setSubmitting(false);
+                navigation.goBack();
+              } catch (error) {
+                alert(`upload failed, ${error}`);
+                actions.setSubmitting(false);
+              }
             }}
           >
             {({
@@ -192,7 +178,6 @@ export default class NewHomemadeMealScreen extends React.Component {
                       paddingTop: 10,
                       paddingBottom: 10,
                     }}
-                    ref={this.imagePickerButtonRef}
                     onPress={async () => {
                       const response = await ImagePicker.launchImageLibraryAsync(imagePickerOptions);
                       if (response.cancelled) {
@@ -200,10 +185,6 @@ export default class NewHomemadeMealScreen extends React.Component {
                         return;
                       }
                       handleChange('imageFile')(response);
-                      if (this.firstInputRef.current) {
-                        // eslint-disable-next-line
-                        this.firstInputRef.current._root._inputRef.focus();
-                      }
                     }}
                   >
                     {values.imageFile
@@ -213,7 +194,12 @@ export default class NewHomemadeMealScreen extends React.Component {
                           style={{ height: 60, width: 60 }}
                         />
                       )
-                      : null}
+                      : (
+                        <Image
+                          source={{ uri: meal.photoUrl }}
+                          style={{ height: 60, width: 60 }}
+                        />
+                      )}
                   </TouchableOpacity>
                   <Input
                     ref={this.firstInputRef}
@@ -225,16 +211,18 @@ export default class NewHomemadeMealScreen extends React.Component {
                   />
                 </Item>
                 <Item last>
-                  <Input
-                    placeholder="Duration"
-                    onBlur={handleBlur('duration')}
-                    onChangeText={handleChange('duration')}
-                    value={values.duration}
-                  />
+                  <Item last>
+                    <NumericInput
+                      placeholder="Duration"
+                      onBlur={handleBlur('durationInMinutes')}
+                      onChangeText={handleChange('durationInMinutes')}
+                      value={values.durationInMinutes}
+                    />
+                  </Item>
                 </Item>
                 {isSubmitting
                   ? (<Spinner color="red" />)
-                  : (<Button onPress={handleSubmit}><Text>Create</Text></Button>)}
+                  : (<Button onPress={handleSubmit}><Text>Update</Text></Button>)}
               </Form>
             )}
           </Formik>
@@ -244,6 +232,6 @@ export default class NewHomemadeMealScreen extends React.Component {
   }
 }
 
-NewHomemadeMealScreen.propTypes = {
+EditHomemadeMealScreen.propTypes = {
   navigation: navigationShape.isRequired,
 };
