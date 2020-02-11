@@ -14,10 +14,11 @@ import {
 } from 'native-base';
 import axios from 'axios';
 import { mealShape, navigationShape } from '../constants/Shapes';
+import { getUrl } from '../constants/config/BackendConfig';
 
 const deleteOutsideMeal = async (mealId) => (
   axios.delete(
-    `http://ec2-13-58-5-77.us-east-2.compute.amazonaws.com:8080/outsidemeals/${mealId}`,
+    getUrl(`/outsidemeals/${mealId}`),
     {
       headers: {
         Authorization: await AsyncStorage.getItem('idToken'),

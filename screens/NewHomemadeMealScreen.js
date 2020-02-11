@@ -8,6 +8,7 @@ import {
   Button,
   Text,
   Spinner,
+  Textarea,
 } from 'native-base';
 import { Image, TouchableOpacity, AsyncStorage } from 'react-native';
 import {
@@ -15,6 +16,7 @@ import {
 } from 'formik';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
+import { getUrl } from '../constants/config/BackendConfig';
 import { navigationShape } from '../constants/Shapes';
 
 const imagePickerOptions = {
@@ -124,6 +126,7 @@ export default class NewHomemadeMealScreen extends React.Component {
               photoUrl: '',
               imageFile: '',
               duration: '',
+              recipe: '',
             }}
             validate={() => {
               const errors = {};
@@ -151,9 +154,10 @@ export default class NewHomemadeMealScreen extends React.Component {
                     photoUrl,
                     catId: 'defaultCategory',
                     durationInMinutes: values.duration,
+                    recipe: values.recipe,
                   };
                   return axios.post(
-                    'http://ec2-13-58-5-77.us-east-2.compute.amazonaws.com:8080/homemademeals',
+                    getUrl('/homemademeals'),
                     meal,
                     {
                       headers: {
@@ -232,6 +236,14 @@ export default class NewHomemadeMealScreen extends React.Component {
                     value={values.duration}
                   />
                 </Item>
+                <Textarea
+                  style={{ rowSpan: 5 }}
+                  bordered
+                  placeholder="Recipe"
+                  onBlur={handleBlur('recipe')}
+                  onChangeText={handleChange('recipe')}
+                  value={values.recipe}
+                />
                 {isSubmitting
                   ? (<Spinner color="red" />)
                   : (<Button onPress={handleSubmit}><Text>Create</Text></Button>)}

@@ -16,6 +16,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import { navigationShape } from '../constants/Shapes';
+import { getUrl } from '../constants/config/BackendConfig';
 import NumericInput from '../components/NumericInput';
 
 const imagePickerOptions = {
@@ -147,7 +148,7 @@ export default class EditOutsideMealScreen extends React.Component {
                 console.log(uploadedMeal);
                 console.log(meal);
                 await axios.put(
-                  'http://ec2-13-58-5-77.us-east-2.compute.amazonaws.com:8080/outsidemeals',
+                  getUrl('/outsidemeals'),
                   uploadedMeal,
                   {
                     headers: {

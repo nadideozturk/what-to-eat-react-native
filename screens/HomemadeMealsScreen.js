@@ -20,6 +20,7 @@ import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import * as GridHelper from '../helpers/GridHelpers';
 import { navigationShape } from '../constants/Shapes';
+import { getUrl } from '../constants/config/BackendConfig';
 
 const defaultMealImageUrl = 'https://res.cloudinary.com/dv0qmj6vt/image/upload/v1571892846/hbc79s2xpvxnxsbnsbwe.jpg';
 
@@ -50,7 +51,7 @@ export default class HomemadeMealsScreen extends Component {
 
   async fetchData() {
     axios.get(
-      'http://ec2-13-58-5-77.us-east-2.compute.amazonaws.com:8080/homemademeals',
+      getUrl('/homemademeals'),
       {
         headers: {
           Authorization: await AsyncStorage.getItem('idToken'),
@@ -61,7 +62,6 @@ export default class HomemadeMealsScreen extends Component {
         this.setState({
           meals: response.data,
         });
-        // console.log(response.data);
       })
       .catch((error) => {
         console.log(error);

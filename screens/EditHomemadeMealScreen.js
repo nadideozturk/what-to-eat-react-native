@@ -8,14 +8,21 @@ import {
   Button,
   Text,
   Spinner,
+  Textarea,
+  Label,
 } from 'native-base';
-import { Image, TouchableOpacity, AsyncStorage } from 'react-native';
+import {
+  Image,
+  TouchableOpacity,
+  AsyncStorage,
+} from 'react-native';
 import {
   Formik,
 } from 'formik';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import { navigationShape } from '../constants/Shapes';
+import { getUrl } from '../constants/config/BackendConfig';
 import NumericInput from '../components/NumericInput';
 
 const imagePickerOptions = {
@@ -115,7 +122,8 @@ export default class EditHomemadeMealScreen extends React.Component {
               mealName: meal.name,
               photoUrl: meal.photoUrl,
               imageFile: meal.imageFile,
-              durationInMinutes: String(meal.durationInMinutes),
+              durationInMinutes: meal.durationInMinutes ? String(meal.durationInMinutes) : '',
+              recipe: meal.recipe,
             }}
             validate={() => {
               const errors = {};
@@ -145,7 +153,7 @@ export default class EditHomemadeMealScreen extends React.Component {
                 console.log(uploadedMeal);
                 console.log(meal);
                 await axios.put(
-                  'http://ec2-13-58-5-77.us-east-2.compute.amazonaws.com:8080/homemademeals',
+                  getUrl('/homemademeals'),
                   uploadedMeal,
                   {
                     headers: {
@@ -168,7 +176,11 @@ export default class EditHomemadeMealScreen extends React.Component {
               values,
               isSubmitting,
             }) => (
-              <Form>
+              <Form
+                style={{
+                  paddingRight: 10,
+                }}
+              >
                 <Item>
                   <TouchableOpacity
                     style={{
@@ -210,19 +222,51 @@ export default class EditHomemadeMealScreen extends React.Component {
                     value={values.mealName}
                   />
                 </Item>
-                <Item last>
-                  <Item last>
+                <Item>
+                  <Item inlineLabel>
+                    <Label>Duration</Label>
                     <NumericInput
-                      placeholder="Duration"
                       onBlur={handleBlur('durationInMinutes')}
                       onChangeText={handleChange('durationInMinutes')}
                       value={values.durationInMinutes}
+                      placeholder=""
                     />
                   </Item>
                 </Item>
+                <Label style={{
+                  paddingTop: 10,
+                  paddingBottom: 10,
+                  paddingLeft: 20,
+                }}
+                >
+                  Recipe
+                </Label>
+                <Item
+                  style={{
+                    paddingBottom: 10,
+                  }}
+                >
+                  <Textarea
+                    rowSpan={8}
+                    bordered
+                    placeholder="Enter recipe (optional)"
+                    onBlur={handleBlur('recipe')}
+                    onChangeText={handleChange('recipe')}
+                    value={values.recipe}
+                    style={{
+                      width: '100%',
+                    }}
+                  />
+                </Item>
                 {isSubmitting
                   ? (<Spinner color="red" />)
-                  : (<Button onPress={handleSubmit}><Text>Update</Text></Button>)}
+                  : (
+                    <TouchableOpacity style={{ paddingLeft: 15 }}>
+                      <Button block onPress={handleSubmit}>
+                        <Text>Update</Text>
+                      </Button>
+                    </TouchableOpacity>
+                  )}
               </Form>
             )}
           </Formik>

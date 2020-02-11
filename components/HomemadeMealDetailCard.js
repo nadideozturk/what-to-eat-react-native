@@ -14,11 +14,12 @@ import {
 } from 'native-base';
 import axios from 'axios';
 import { mealShape, navigationShape } from '../constants/Shapes';
+import { getUrl } from '../constants/config/BackendConfig';
 import Recipe from './Recipe';
 
 const deleteHomemadeMeal = async (mealId) => (
   axios.delete(
-    `http://ec2-13-58-5-77.us-east-2.compute.amazonaws.com:8080/homemademeals/${mealId}`,
+    getUrl(`/homemademeals/${mealId}`),
     {
       headers: {
         Authorization: await AsyncStorage.getItem('idToken'),
@@ -35,7 +36,7 @@ const CANCEL_INDEX = 2;
 export default class HomemadeMealDetailCard extends React.PureComponent {
   render() {
     const { meal } = this.props;
-
+    console.log(meal.recipe);
     return (
       <Card>
         <CardItem>
@@ -103,7 +104,9 @@ export default class HomemadeMealDetailCard extends React.PureComponent {
         <CardItem cardBody>
           <Image source={{ uri: meal.photoUrl || defaultMealImageUrl }} style={{ height: 350, width: null, flex: 1 }} />
         </CardItem>
-        <Recipe />
+        <Recipe
+          meal={meal}
+        />
       </Card>
     );
   }
