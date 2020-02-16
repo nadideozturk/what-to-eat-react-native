@@ -1,16 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Container, Content, Root } from 'native-base';
 import OutsideMealDetailCard from '../components/OutsideMealDetailCard';
-import { navigationShape } from '../constants/Shapes';
+import { navigationShape, outsideMealWithMetadataShape } from '../constants/Shapes';
 
-export default class OutsideMealDetailsScreen extends React.Component {
+class OutsideMealDetailsScreen extends React.Component {
   static navigationOptions = {
-    title: 'Detail',
+    title: 'Outside Post',
   };
 
   render() {
-    const { navigation } = this.props;
-    const meal = navigation.getParam('meal', '');
+    const { navigation, mealWithMetadata } = this.props;
+    const meal = mealWithMetadata.value;
 
     return (
       <Root>
@@ -31,4 +32,11 @@ export default class OutsideMealDetailsScreen extends React.Component {
 
 OutsideMealDetailsScreen.propTypes = {
   navigation: navigationShape.isRequired,
+  mealWithMetadata: outsideMealWithMetadataShape.isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  mealWithMetadata: state.currentOutsideMeal,
+});
+
+export default connect(mapStateToProps)(OutsideMealDetailsScreen);

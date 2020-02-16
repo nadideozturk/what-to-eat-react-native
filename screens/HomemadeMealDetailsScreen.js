@@ -1,16 +1,17 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { Container, Content, Root } from 'native-base';
 import HomemadeMealDetailCard from '../components/HomemadeMealDetailCard';
-import { navigationShape } from '../constants/Shapes';
+import { navigationShape, homemadeMealWithMetadataShape } from '../constants/Shapes';
 
-export default class HomemadeMealDetailsScreen extends React.Component {
+class HomemadeMealDetailsScreen extends React.PureComponent {
   static navigationOptions = {
     title: 'Homemade Post',
   };
 
   render() {
-    const { navigation } = this.props;
-    const meal = navigation.getParam('meal', '');
+    const { navigation, mealWithMetadata } = this.props;
+    const meal = mealWithMetadata.value;
 
     return (
       <Root>
@@ -31,4 +32,11 @@ export default class HomemadeMealDetailsScreen extends React.Component {
 
 HomemadeMealDetailsScreen.propTypes = {
   navigation: navigationShape.isRequired,
+  mealWithMetadata: homemadeMealWithMetadataShape.isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  mealWithMetadata: state.currentHomemadeMeal,
+});
+
+export default connect(mapStateToProps)(HomemadeMealDetailsScreen);

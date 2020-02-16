@@ -2,6 +2,8 @@ import { AppLoading } from 'expo';
 import { Asset } from 'expo-asset';
 import * as Font from 'expo-font';
 import React, { useState } from 'react';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
 import {
   Platform,
   StatusBar,
@@ -11,7 +13,7 @@ import {
 import { Ionicons } from '@expo/vector-icons';
 import PropTypes from 'prop-types';
 import AppFontLoader from './AppFontLoader';
-
+import combinedReducers, { initialState } from './reducers';
 import AppNavigator from './navigation/AppNavigator';
 
 async function loadResourcesAsync() {
@@ -50,6 +52,8 @@ const styles = StyleSheet.create({
   },
 });
 
+const store = createStore(combinedReducers, initialState);
+
 export default function App(props) {
   const [isLoadingComplete, setLoadingComplete] = useState(false);
   const { skipLoadingScreen } = props;
@@ -65,10 +69,12 @@ export default function App(props) {
   }
   return (
     <AppFontLoader>
-      <View style={styles.container}>
-        {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
-        <AppNavigator />
-      </View>
+      <Provider store={store}>
+        <View style={styles.container}>
+          {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+          <AppNavigator />
+        </View>
+      </Provider>
     </AppFontLoader>
   );
 }

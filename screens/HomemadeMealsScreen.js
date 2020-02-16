@@ -1,9 +1,6 @@
-import React, { Component } from 'react';
-import {
-  Image,
-  AsyncStorage,
-  Platform,
-} from 'react-native';
+import React from 'react';
+import { connect } from 'react-redux';
+import { Image, Platform } from 'react-native';
 import {
   Container,
   Content,
@@ -13,14 +10,14 @@ import {
   Body,
   Spinner,
 } from 'native-base';
+import PropTypes from 'prop-types';
 import IonIcon from 'react-native-vector-icons/Ionicons';
 import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-buttons';
-import axios from 'axios';
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
+import * as HomemadeMealActions from '../actionCreators/HomemadeMealActions';
 import * as GridHelper from '../helpers/GridHelpers';
-import { navigationShape } from '../constants/Shapes';
-import { getUrl } from '../constants/config/BackendConfig';
+import { navigationShape, homemadeMealListWithMetadataShape } from '../constants/Shapes';
 
 const defaultMealImageUrl = 'https://res.cloudinary.com/dv0qmj6vt/image/upload/v1571892846/hbc79s2xpvxnxsbnsbwe.jpg';
 
@@ -29,50 +26,26 @@ const IoniconsHeaderButton = (passMeFurther) => (
   <HeaderButton {...passMeFurther} IconComponent={IonIcon} iconSize={32} color="black" />
 );
 
-export default class HomemadeMealsScreen extends Component {
-  constructor(props, state) {
-    super(props, state);
-    this.fetchData = this.fetchData.bind(this);
-    this.state = {
-      meals: undefined,
-    };
-  }
-
+class HomemadeMealsScreen extends React.PureComponent {
   async componentDidMount() {
-    await this.fetchData();
+    const { dispatch } = this.props;
+    HomemadeMealActions.fetchHomemadeMealList(dispatch);
+
     const { navigation } = this.props;
     this.willFocusSubscription = navigation.addListener(
       'willFocus',
       () => {
-        this.fetchData();
+        // TODO make sure this still works, e.g. when coming back from create use case
+        HomemadeMealActions.fetchHomemadeMealList(dispatch);
       },
     );
   }
 
-  async fetchData() {
-    axios.get(
-      getUrl('/homemademeals'),
-      {
-        headers: {
-          Authorization: await AsyncStorage.getItem('idToken'),
-        },
-      },
-    )
-      .then((response) => {
-        this.setState({
-          meals: response.data,
-        });
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }
-
   render() {
-    const { meals } = this.state;
-    const { navigation } = this.props;
+    const { navigation, dispatch } = this.props;
+    const { mealsWithMetadata } = this.props;
 
-    if (typeof meals === 'undefined') {
+    if (mealsWithMetadata.loading) {
       return (
         <Container>
           <Content>
@@ -81,6 +54,12 @@ export default class HomemadeMealsScreen extends Component {
         </Container>
       );
     }
+
+    const meals = mealsWithMetadata.value;
+    if (typeof (meals) === 'undefined') {
+      return null;
+    }
+
     if (meals.length === 0) {
       return (
         <Container>
@@ -95,11 +74,10 @@ export default class HomemadeMealsScreen extends Component {
         <CardItem
           cardBody
           button
-          onPress={() => navigation.navigate(
-            'HomemadeMealDetails', {
-              meal,
-            },
-          )}
+          onPress={() => {
+            dispatch(HomemadeMealActions.setCurrentHomemadeMeal(meal));
+            navigation.navigate('HomemadeMealDetails');
+          }}
         >
           <Image
             style={{ flex: 1, width: null, height: 200 }}
@@ -108,11 +86,10 @@ export default class HomemadeMealsScreen extends Component {
         </CardItem>
         <CardItem
           button
-          onPress={() => navigation.navigate(
-            'HomemadeMealDetails', {
-              meal,
-            },
-          )}
+          onPress={() => {
+            dispatch(HomemadeMealActions.setCurrentHomemadeMeal(meal));
+            navigation.navigate('HomemadeMealDetails');
+          }}
         >
           <Body>
             <Text>{`${meal.name}`}</Text>
@@ -161,4 +138,12 @@ HomemadeMealsScreen.navigationOptions = ({ navigation }) => ({
 
 HomemadeMealsScreen.propTypes = {
   navigation: navigationShape.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  mealsWithMetadata: homemadeMealListWithMetadataShape.isRequired,
 };
+
+const mapStateToProps = (state) => ({
+  mealsWithMetadata: state.homemadeMealList,
+});
+
+export default connect(mapStateToProps)(HomemadeMealsScreen);

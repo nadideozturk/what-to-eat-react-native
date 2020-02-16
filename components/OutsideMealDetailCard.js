@@ -1,5 +1,7 @@
 import React from 'react';
-import { Image, Alert, AsyncStorage } from 'react-native';
+import { Image, Alert } from 'react-native';
+import { connect } from 'react-redux';
+import PropTypes from 'prop-types';
 import {
   Card,
   CardItem,
@@ -12,29 +14,17 @@ import {
   Thumbnail,
   ActionSheet,
 } from 'native-base';
-import axios from 'axios';
 import { mealShape, navigationShape } from '../constants/Shapes';
-import { getUrl } from '../constants/config/BackendConfig';
-
-const deleteOutsideMeal = async (mealId) => (
-  axios.delete(
-    getUrl(`/outsidemeals/${mealId}`),
-    {
-      headers: {
-        Authorization: await AsyncStorage.getItem('idToken'),
-      },
-    },
-  )
-);
+import * as OutsideMealActions from '../actionCreators/OutsideMealActions';
 
 const defaultMealImageUrl = 'https://res.cloudinary.com/dv0qmj6vt/image/upload/v1571892846/hbc79s2xpvxnxsbnsbwe.jpg';
 const BUTTONS = ['Delete', 'Edit', 'Cancel'];
 const DESTRUCTIVE_INDEX = 0;
 const CANCEL_INDEX = 2;
 
-export default class OutsideMealDetailCard extends React.PureComponent {
+class OutsideMealDetailCard extends React.PureComponent {
   render() {
-    const { meal } = this.props;
+    const { meal, navigation, dispatch } = this.props;
 
     return (
       <Card>
@@ -75,14 +65,11 @@ export default class OutsideMealDetailCard extends React.PureComponent {
                         {
                           text: 'Delete',
                           onPress: async () => {
-                            try {
-                              await deleteOutsideMeal(meal.id);
-                            } catch (e) {
-                              console.log('Unsuccessful deleted.', e);
-                            }
-                            // alert('Deleted Successfully');
-                            const { navigation } = this.props;
-                            navigation.goBack();
+                            OutsideMealActions.deleteOutsideMeal({
+                              dispatch,
+                              mealId: meal.id,
+                              successHandler: () => { navigation.goBack(); },
+                            });
                           },
                         },
                       ],
@@ -90,7 +77,6 @@ export default class OutsideMealDetailCard extends React.PureComponent {
                     );
                   } else if (buttonIndex === 1) {
                     // go to edit screen
-                    const { navigation } = this.props;
                     navigation.navigate('EditOutsideMeal', { meal });
                   }
                 },
@@ -122,4 +108,7 @@ export default class OutsideMealDetailCard extends React.PureComponent {
 OutsideMealDetailCard.propTypes = {
   meal: mealShape.isRequired,
   navigation: navigationShape.isRequired,
+  dispatch: PropTypes.func.isRequired,
 };
+
+export default connect()(OutsideMealDetailCard);
