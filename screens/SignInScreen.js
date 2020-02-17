@@ -70,11 +70,7 @@ export default class SignInScreen extends React.Component {
         {inProgress
           ? (
             <Content
-              contentContainerStyle={{
-                alignItems: 'center',
-                justifyContent: 'center',
-                flex: 1,
-              }}
+              contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}
             >
               <Spinner color="red" />
             </Content>

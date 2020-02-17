@@ -48,7 +48,9 @@ class HomemadeMealsScreen extends React.PureComponent {
     if (mealsWithMetadata.loading) {
       return (
         <Container>
-          <Content>
+          <Content
+            contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}
+          >
             <Spinner color="red" />
           </Content>
         </Container>
