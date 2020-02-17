@@ -20,7 +20,14 @@ export default class SettingsScreen extends React.Component {
 
   render() {
     return (
-      <View>
+      <View style={{
+        justifyContent: 'flex-end',
+        flex: 1,
+        marginLeft: 20,
+        marginRight: 20,
+        marginBottom: 20,
+      }}
+      >
         {/* eslint-disable-next-line no-underscore-dangle */}
         <Button title="I'm done, sign me out" onPress={this._signOutAsync} />
       </View>
