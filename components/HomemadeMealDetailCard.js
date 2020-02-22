@@ -23,9 +23,15 @@ const BUTTONS = ['Delete', 'Edit', 'Cancel'];
 const DESTRUCTIVE_INDEX = 0;
 const CANCEL_INDEX = 2;
 
+
 class HomemadeMealDetailCard extends React.PureComponent {
   render() {
     const { meal, navigation, dispatch } = this.props;
+    const contents = meal.tags.map((item) => (
+      <Text key={item.id}>
+        {item.tagName}
+      </Text>
+    ));
 
     return (
       <Card>
@@ -38,7 +44,7 @@ class HomemadeMealDetailCard extends React.PureComponent {
             />
             <Body>
               <Text>{meal.name}</Text>
-              <Text note>11 hour ago</Text>
+              <Text note>11 hour ago </Text>
             </Body>
           </Left>
           <Right>
@@ -89,6 +95,9 @@ class HomemadeMealDetailCard extends React.PureComponent {
         </CardItem>
         <CardItem cardBody>
           <Image source={{ uri: meal.photoUrl || defaultMealImageUrl }} style={{ height: 350, width: null, flex: 1 }} />
+        </CardItem>
+        <CardItem footer>
+          {contents}
         </CardItem>
         <Recipe
           meal={meal}

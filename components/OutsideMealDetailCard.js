@@ -25,6 +25,11 @@ const CANCEL_INDEX = 2;
 class OutsideMealDetailCard extends React.PureComponent {
   render() {
     const { meal, navigation, dispatch } = this.props;
+    const contents = meal.tags.map((item) => (
+      <Text key={item.id}>
+        {item.tagName}
+      </Text>
+    ));
 
     return (
       <Card>
@@ -99,6 +104,9 @@ class OutsideMealDetailCard extends React.PureComponent {
                CAD
             </Text>
           </Right>
+        </CardItem>
+        <CardItem footer>
+          {contents}
         </CardItem>
       </Card>
     );
