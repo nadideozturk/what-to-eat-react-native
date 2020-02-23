@@ -13,6 +13,7 @@ import {
   Right,
   Thumbnail,
   ActionSheet,
+  Badge,
 } from 'native-base';
 import { mealShape, navigationShape } from '../constants/Shapes';
 import Recipe from './Recipe';
@@ -27,10 +28,12 @@ const CANCEL_INDEX = 2;
 class HomemadeMealDetailCard extends React.PureComponent {
   render() {
     const { meal, navigation, dispatch } = this.props;
-    const contents = meal.tags.map((item) => (
-      <Text key={item.id}>
-        {item.tagName}
-      </Text>
+    const tags = meal.tags.map((item) => (
+      <Badge warning key={item.id}>
+        <Text>
+          {item.tagName}
+        </Text>
+      </Badge>
     ));
 
     return (
@@ -96,8 +99,9 @@ class HomemadeMealDetailCard extends React.PureComponent {
         <CardItem cardBody>
           <Image source={{ uri: meal.photoUrl || defaultMealImageUrl }} style={{ height: 350, width: null, flex: 1 }} />
         </CardItem>
-        <CardItem footer>
-          {contents}
+        <CardItem style={{ paddingBottom: 0 }}>
+          <Text>Tags  </Text>
+          {tags}
         </CardItem>
         <Recipe
           meal={meal}

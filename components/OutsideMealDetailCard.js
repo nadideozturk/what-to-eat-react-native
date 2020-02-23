@@ -13,6 +13,7 @@ import {
   Right,
   Thumbnail,
   ActionSheet,
+  Badge,
 } from 'native-base';
 import { mealShape, navigationShape } from '../constants/Shapes';
 import * as OutsideMealActions from '../actionCreators/OutsideMealActions';
@@ -25,10 +26,12 @@ const CANCEL_INDEX = 2;
 class OutsideMealDetailCard extends React.PureComponent {
   render() {
     const { meal, navigation, dispatch } = this.props;
-    const contents = meal.tags.map((item) => (
-      <Text key={item.id}>
-        {item.tagName}
-      </Text>
+    const tags = meal.tags.map((item) => (
+      <Badge warning key={item.id}>
+        <Text>
+          {item.tagName}
+        </Text>
+      </Badge>
     ));
 
     return (
@@ -105,8 +108,9 @@ class OutsideMealDetailCard extends React.PureComponent {
             </Text>
           </Right>
         </CardItem>
-        <CardItem footer>
-          {contents}
+        <CardItem>
+          <Text>Tags  </Text>
+          {tags}
         </CardItem>
       </Card>
     );
