@@ -15,8 +15,28 @@ import {
 import { Image, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as ImagePicker from 'expo-image-picker';
+import Autocomplete from 'react-native-autocomplete-input';
 import { navigationShape } from '../constants/Shapes';
 import * as HomemadeMealActions from '../actionCreators/HomemadeMealActions';
+
+const allTags = [
+  { id: '1', tagName: 'dessert' },
+  { id: '2', tagName: 'soup' },
+  { id: '3', tagName: 'sour' },
+  { id: '4', tagName: 'test test' },
+  { id: '5', tagName: 'test2' },
+  { id: '6', tagName: 'test3' },
+  { id: '7', tagName: 'test4' },
+  { id: '8', tagName: 'test5' },
+];
+
+const filterTags = (userInput) => {
+  if (!userInput) {
+    return [];
+  }
+  const userInputLower = userInput.toLowerCase();
+  return allTags.filter((t) => t.tagName.startsWith(userInputLower));
+};
 
 const imagePickerOptions = {
   // TODO test video
@@ -26,15 +46,18 @@ const imagePickerOptions = {
 };
 
 class NewHomemadeMealScreen extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor(props, state) {
+    super(props, state);
     this.imagePickerButtonRef = React.createRef();
     this.firstInputRef = React.createRef();
+    this.state = {
+      tagsQuery: undefined,
+    };
   }
 
   async componentDidMount() {
     if (this.imagePickerButtonRef.current) {
-      this.imagePickerButtonRef.current.touchableHandlePress();
+      // this.imagePickerButtonRef.current.touchableHandlePress();
     }
   }
 
@@ -44,6 +67,7 @@ class NewHomemadeMealScreen extends React.Component {
 
   render() {
     const { dispatch, navigation } = this.props;
+    const { tagsQuery } = this.state;
 
     return (
       <Container>
@@ -122,7 +146,7 @@ class NewHomemadeMealScreen extends React.Component {
                     value={values.mealName}
                   />
                 </Item>
-                <Item last>
+                <Item>
                   <Input
                     placeholder="Duration"
                     onBlur={handleBlur('duration')}
@@ -130,8 +154,34 @@ class NewHomemadeMealScreen extends React.Component {
                     value={values.duration}
                   />
                 </Item>
+                <Item style={{
+                  zIndex: 2,
+                }}
+                >
+                  <Text>Tags </Text>
+                  <Autocomplete
+                    data={filterTags(tagsQuery)}
+                    defaultValue={null}
+                    onChangeText={(text) => this.setState({ tagsQuery: text })}
+                    renderItem={({ item }) => (
+                      <TouchableOpacity
+                        onPress={() => console.log(`selected: ${JSON.stringify(item)}`)}
+                      >
+                        <Text>{item.tagName}</Text>
+                      </TouchableOpacity>
+                    )}
+                    containerStyle={{
+                      width: '90%',
+                      paddingTop: 10,
+                      paddingRight: 20,
+                      paddingBottom: 10,
+                      paddingLeft: 10,
+                    }}
+                    listStyle={{ zIndex: 1, position: 'absolute' }}
+                  />
+                </Item>
                 <Textarea
-                  style={{ rowSpan: 5 }}
+                  rowSpan={5}
                   bordered
                   placeholder="Recipe"
                   onBlur={handleBlur('recipe')}
