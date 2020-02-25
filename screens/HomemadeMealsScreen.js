@@ -16,6 +16,7 @@ import { HeaderButtons, HeaderButton, Item } from 'react-navigation-header-butto
 import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import * as HomemadeMealActions from '../actionCreators/HomemadeMealActions';
+import * as TagActions from '../actionCreators/TagActions';
 import * as GridHelper from '../helpers/GridHelpers';
 import { navigationShape, homemadeMealListWithMetadataShape } from '../constants/Shapes';
 
@@ -30,6 +31,7 @@ class HomemadeMealsScreen extends React.PureComponent {
   async componentDidMount() {
     const { dispatch } = this.props;
     HomemadeMealActions.fetchHomemadeMealList(dispatch);
+    TagActions.fetchTags(dispatch);
 
     const { navigation } = this.props;
     this.willFocusSubscription = navigation.addListener(

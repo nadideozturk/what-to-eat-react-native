@@ -12,31 +12,12 @@ import {
   Spinner,
   Textarea,
 } from 'native-base';
-import { Image, TouchableOpacity } from 'react-native';
+import { Image, TouchableOpacity, View } from 'react-native';
 import { Formik } from 'formik';
 import * as ImagePicker from 'expo-image-picker';
-import Autocomplete from 'react-native-autocomplete-input';
-import { navigationShape } from '../constants/Shapes';
+import TagSelector from '../components/TagSelector';
+import { navigationShape, tagListWithMetadataShape } from '../constants/Shapes';
 import * as HomemadeMealActions from '../actionCreators/HomemadeMealActions';
-
-const allTags = [
-  { id: '1', tagName: 'dessert' },
-  { id: '2', tagName: 'soup' },
-  { id: '3', tagName: 'sour' },
-  { id: '4', tagName: 'test test' },
-  { id: '5', tagName: 'test2' },
-  { id: '6', tagName: 'test3' },
-  { id: '7', tagName: 'test4' },
-  { id: '8', tagName: 'test5' },
-];
-
-const filterTags = (userInput) => {
-  if (!userInput) {
-    return [];
-  }
-  const userInputLower = userInput.toLowerCase();
-  return allTags.filter((t) => t.tagName.startsWith(userInputLower));
-};
 
 const imagePickerOptions = {
   // TODO test video
@@ -50,9 +31,6 @@ class NewHomemadeMealScreen extends React.Component {
     super(props, state);
     this.imagePickerButtonRef = React.createRef();
     this.firstInputRef = React.createRef();
-    this.state = {
-      tagsQuery: undefined,
-    };
   }
 
   async componentDidMount() {
@@ -66,12 +44,13 @@ class NewHomemadeMealScreen extends React.Component {
   };
 
   render() {
-    const { dispatch, navigation } = this.props;
-    const { tagsQuery } = this.state;
+    const { dispatch, navigation, tagListWithMetadata } = this.props;
 
     return (
       <Container>
-        <Content>
+        <Content
+          contentContainerStyle={{ flex: 1 }}
+        >
           <Formik
             initialValues={{
               mealName: '',
@@ -79,6 +58,7 @@ class NewHomemadeMealScreen extends React.Component {
               imageFile: '',
               duration: '',
               recipe: '',
+              tags: '',
             }}
             validate={() => {} /* TODO implement validation */}
             onSubmit={(values) => {
@@ -88,6 +68,7 @@ class NewHomemadeMealScreen extends React.Component {
                 catId: 'defaultCategory',
                 durationInMinutes: values.duration,
                 recipe: values.recipe,
+                tags: values.tags,
               };
               HomemadeMealActions.createHomemadeMeal({
                 dispatch,
@@ -104,7 +85,7 @@ class NewHomemadeMealScreen extends React.Component {
               values,
               isSubmitting,
             }) => (
-              <Form>
+              <Form style={{ flex: 1 }}>
                 <Item>
                   <TouchableOpacity
                     style={{
@@ -154,43 +135,31 @@ class NewHomemadeMealScreen extends React.Component {
                     value={values.duration}
                   />
                 </Item>
-                <Item style={{
-                  zIndex: 2,
-                }}
-                >
-                  <Text>Tags </Text>
-                  <Autocomplete
-                    data={filterTags(tagsQuery)}
-                    defaultValue={null}
-                    onChangeText={(text) => this.setState({ tagsQuery: text })}
-                    renderItem={({ item }) => (
-                      <TouchableOpacity
-                        onPress={() => console.log(`selected: ${JSON.stringify(item)}`)}
-                      >
-                        <Text>{item.tagName}</Text>
-                      </TouchableOpacity>
-                    )}
-                    containerStyle={{
-                      width: '90%',
-                      paddingTop: 10,
-                      paddingRight: 20,
-                      paddingBottom: 10,
-                      paddingLeft: 10,
-                    }}
-                    listStyle={{ zIndex: 1, position: 'absolute' }}
-                  />
-                </Item>
+                <TagSelector
+                  style={{ zIndex: 2 }}
+                  tagListWithMetadata={tagListWithMetadata}
+                  selectedTags={values.tags || []}
+                  onSelectTag={(tag) => {
+                    console.log('onSelectTag');
+                    console.log(tag);
+                    const existingSelectedTags = values.tags || [];
+                    const newSelectedTags = [...existingSelectedTags, tag];
+                    handleChange('tags')(newSelectedTags);
+                  }}
+                />
                 <Textarea
-                  rowSpan={5}
+                  rowSpan={2}
                   bordered
                   placeholder="Recipe"
                   onBlur={handleBlur('recipe')}
                   onChangeText={handleChange('recipe')}
                   value={values.recipe}
                 />
-                {isSubmitting
-                  ? (<Spinner color="red" />)
-                  : (<Button onPress={handleSubmit}><Text>Create</Text></Button>)}
+                <View style={{ zIndex: -1 }}>
+                  {isSubmitting
+                    ? (<Spinner color="red" />)
+                    : (<Button onPress={handleSubmit}><Text>Create</Text></Button>)}
+                </View>
               </Form>
             )}
           </Formik>
@@ -203,6 +172,11 @@ class NewHomemadeMealScreen extends React.Component {
 NewHomemadeMealScreen.propTypes = {
   navigation: navigationShape.isRequired,
   dispatch: PropTypes.func.isRequired,
+  tagListWithMetadata: tagListWithMetadataShape.isRequired,
 };
 
-export default connect()(NewHomemadeMealScreen);
+const mapStateToProps = (state) => ({
+  tagListWithMetadata: state.tags,
+});
+
+export default connect(mapStateToProps)(NewHomemadeMealScreen);

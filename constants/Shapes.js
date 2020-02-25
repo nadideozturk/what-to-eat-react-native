@@ -41,6 +41,17 @@ export const outsideMealListWithMetadataShape = PropTypes.shape({
   exception: PropTypes.object,
 });
 
+export const tagShape = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  tagName: PropTypes.string.isRequired,
+});
+
+export const tagListWithMetadataShape = PropTypes.shape({
+  value: PropTypes.arrayOf(tagShape),
+  loading: PropTypes.bool,
+  exception: PropTypes.object,
+});
+
 export const navigationShape = PropTypes.shape({
   navigate: PropTypes.func.isRequired,
 });

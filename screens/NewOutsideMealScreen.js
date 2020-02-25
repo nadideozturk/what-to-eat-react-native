@@ -14,7 +14,8 @@ import {
 import { Image, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as ImagePicker from 'expo-image-picker';
-import { navigationShape } from '../constants/Shapes';
+import TagSelector from '../components/TagSelector';
+import { navigationShape, tagListWithMetadataShape } from '../constants/Shapes';
 import NumericInput from '../components/NumericInput';
 import * as OutsideMealActions from '../actionCreators/OutsideMealActions';
 
@@ -43,7 +44,8 @@ class NewOutsideMealScreen extends React.Component {
   };
 
   render() {
-    const { dispatch, navigation } = this.props;
+    const { dispatch, navigation, tagListWithMetadata } = this.props;
+
     return (
       <Container>
         <Content>
@@ -137,6 +139,7 @@ class NewOutsideMealScreen extends React.Component {
                     value={values.price}
                   />
                 </Item>
+                <TagSelector tagListWithMetadata={tagListWithMetadata} />
                 {isSubmitting
                   ? (<Spinner color="red" />)
                   : (<Button onPress={handleSubmit}><Text>Create</Text></Button>)}
@@ -152,6 +155,11 @@ class NewOutsideMealScreen extends React.Component {
 NewOutsideMealScreen.propTypes = {
   navigation: navigationShape.isRequired,
   dispatch: PropTypes.func.isRequired,
+  tagListWithMetadata: tagListWithMetadataShape.isRequired,
 };
 
-export default connect()(NewOutsideMealScreen);
+const mapStateToProps = (state) => ({
+  tagListWithMetadata: state.tags,
+});
+
+export default connect(mapStateToProps)(NewOutsideMealScreen);
