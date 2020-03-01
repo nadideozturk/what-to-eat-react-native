@@ -35,7 +35,7 @@ OutsideMealDetailsScreen.propTypes = {
   mealWithMetadata: outsideMealWithMetadataShape.isRequired,
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   mealWithMetadata: state.currentOutsideMeal,
 });
 

@@ -8,17 +8,17 @@ const fetchHomemadeMealListStart = () => ({
   type: actionTypes.FETCH_HOMEMADE_MEAL_LIST_START,
 });
 
-const fetchHomemadeMealListSuccess = (response) => ({
+const fetchHomemadeMealListSuccess = response => ({
   type: actionTypes.FETCH_HOMEMADE_MEAL_LIST_SUCCESS,
   response,
 });
 
-const fetchHomemadeMealListFail = (exception) => ({
+const fetchHomemadeMealListFail = exception => ({
   type: actionTypes.FETCH_HOMEMADE_MEAL_LIST_FAIL,
   exception,
 });
 
-export const fetchHomemadeMealList = async (dispatch) => {
+export const fetchHomemadeMealList = async dispatch => {
   dispatch(fetchHomemadeMealListStart());
 
   axios
@@ -30,10 +30,10 @@ export const fetchHomemadeMealList = async (dispatch) => {
         },
       },
     )
-    .then((response) => {
+    .then(response => {
       dispatch(fetchHomemadeMealListSuccess(response));
     })
-    .catch((error) => {
+    .catch(error => {
       dispatch(fetchHomemadeMealListFail(error));
     });
 };
@@ -42,12 +42,12 @@ const createHomemadeMealStart = () => ({
   type: actionTypes.CREATE_HOMEMADE_MEAL_START,
 });
 
-const createHomemadeMealSuccess = (response) => ({
+const createHomemadeMealSuccess = response => ({
   type: actionTypes.CREATE_HOMEMADE_MEAL_SUCCESS,
   response,
 });
 
-const createHomemadeMealFail = (exception) => ({
+const createHomemadeMealFail = exception => ({
   type: actionTypes.CREATE_HOMEMADE_MEAL_FAIL,
   exception,
 });
@@ -61,8 +61,8 @@ export const createHomemadeMeal = async ({
   dispatch(createHomemadeMealStart());
 
   CloudinaryWrapper.uploadFile(imageFile)
-    .then((xhrResponse) => JSON.parse(xhrResponse.target.response).secure_url)
-    .then(async (photoUrl) => {
+    .then(xhrResponse => JSON.parse(xhrResponse.target.response).secure_url)
+    .then(async photoUrl => {
       const mealWithPhotoUrl = {
         ...meal,
         photoUrl,
@@ -77,11 +77,11 @@ export const createHomemadeMeal = async ({
         },
       );
     })
-    .then((response) => {
+    .then(response => {
       successHandler();
       dispatch(createHomemadeMealSuccess(response));
     })
-    .catch((error) => {
+    .catch(error => {
       dispatch(createHomemadeMealFail(error));
       // TODO handle failures alert(`upload failed, ${error}`);
     });
@@ -91,12 +91,12 @@ const deleteHomemadeMealStart = () => ({
   type: actionTypes.DELETE_HOMEMADE_MEAL_START,
 });
 
-const deleteHomemadeMealSuccess = (response) => ({
+const deleteHomemadeMealSuccess = response => ({
   type: actionTypes.DELETE_HOMEMADE_MEAL_SUCCESS,
   response,
 });
 
-const deleteHomemadeMealFail = (exception) => ({
+const deleteHomemadeMealFail = exception => ({
   type: actionTypes.DELETE_HOMEMADE_MEAL_FAIL,
   exception,
 });
@@ -117,11 +117,11 @@ export const deleteHomemadeMeal = async ({
         },
       },
     )
-    .then((response) => {
+    .then(response => {
       dispatch(deleteHomemadeMealSuccess(response));
       successHandler();
     })
-    .catch((error) => dispatch(deleteHomemadeMealFail(error)));
+    .catch(error => dispatch(deleteHomemadeMealFail(error)));
 };
 
 const updateHomemadeMealStart = () => ({
@@ -133,12 +133,12 @@ const updateHomemadeMealStart = () => ({
 //   response,
 // });
 
-const updateHomemadeMealFail = (exception) => ({
+const updateHomemadeMealFail = exception => ({
   type: actionTypes.UPDATE_HOMEMADE_MEAL_FAIL,
   exception,
 });
 
-export const setCurrentHomemadeMeal = (meal) => ({
+export const setCurrentHomemadeMeal = meal => ({
   type: actionTypes.SET_CURRENT_HOMEMADE_MEAL,
   meal,
 });
@@ -177,7 +177,7 @@ export const updateHomemadeMeal = async ({
       // dispatch(updateHomemadeMealSuccess(response)); backend is not sending
       // updated meal
     })
-    .catch((error) => {
+    .catch(error => {
       dispatch(updateHomemadeMealFail(error));
       // TODO handle failures alert(`upload failed, ${error}`);
     });

@@ -7,27 +7,20 @@ import {
   Form,
   Item,
   Input,
-  Button,
-  Text,
-  Spinner,
-  Textarea,
 } from 'native-base';
 import { Image, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as ImagePicker from 'expo-image-picker';
+import TagEditor from '../components/TagEditor';
+import RecipeEditor from '../components/RecipeEditor';
+import SubmitButton from '../components/SubmitButton';
 import { navigationShape } from '../constants/Shapes';
+import { imagePickerOptions, getMealImageSourceWithDeafult } from '../constants/config/Defaults';
 import * as HomemadeMealActions from '../actionCreators/HomemadeMealActions';
 
-const imagePickerOptions = {
-  // TODO test video
-  allowsEditing: true,
-  aspect: [1, 1],
-  // TODO quality
-};
-
 class NewHomemadeMealScreen extends React.Component {
-  constructor(props) {
-    super(props);
+  constructor(props, state) {
+    super(props, state);
     this.imagePickerButtonRef = React.createRef();
     this.firstInputRef = React.createRef();
   }
@@ -47,7 +40,9 @@ class NewHomemadeMealScreen extends React.Component {
 
     return (
       <Container>
-        <Content>
+        <Content
+          contentContainerStyle={{ flex: 1 }}
+        >
           <Formik
             initialValues={{
               mealName: '',
@@ -55,15 +50,17 @@ class NewHomemadeMealScreen extends React.Component {
               imageFile: '',
               duration: '',
               recipe: '',
+              tags: [],
             }}
             validate={() => {} /* TODO implement validation */}
-            onSubmit={(values) => {
+            onSubmit={values => {
               // TODO consider if actions.setSubmitting() is necessary
               const meal = {
                 name: values.mealName,
                 catId: 'defaultCategory',
                 durationInMinutes: values.duration,
                 recipe: values.recipe,
+                tags: values.tags,
               };
               HomemadeMealActions.createHomemadeMeal({
                 dispatch,
@@ -80,7 +77,7 @@ class NewHomemadeMealScreen extends React.Component {
               values,
               isSubmitting,
             }) => (
-              <Form>
+              <Form style={{ paddingRight: 10 }}>
                 <Item>
                   <TouchableOpacity
                     style={{
@@ -111,7 +108,12 @@ class NewHomemadeMealScreen extends React.Component {
                           style={{ height: 60, width: 60 }}
                         />
                       )
-                      : null}
+                      : (
+                        <Image
+                          source={getMealImageSourceWithDeafult()}
+                          style={{ height: 60, width: 60 }}
+                        />
+                      )}
                   </TouchableOpacity>
                   <Input
                     ref={this.firstInputRef}
@@ -122,7 +124,7 @@ class NewHomemadeMealScreen extends React.Component {
                     value={values.mealName}
                   />
                 </Item>
-                <Item last>
+                <Item>
                   <Input
                     placeholder="Duration"
                     onBlur={handleBlur('duration')}
@@ -130,17 +132,22 @@ class NewHomemadeMealScreen extends React.Component {
                     value={values.duration}
                   />
                 </Item>
-                <Textarea
-                  style={{ rowSpan: 5 }}
-                  bordered
-                  placeholder="Recipe"
+                <RecipeEditor
+                  onChange={handleChange('recipe')}
                   onBlur={handleBlur('recipe')}
-                  onChangeText={handleChange('recipe')}
                   value={values.recipe}
                 />
-                {isSubmitting
-                  ? (<Spinner color="red" />)
-                  : (<Button onPress={handleSubmit}><Text>Create</Text></Button>)}
+                <TagEditor
+                  tags={values.tags}
+                  navigation={navigation}
+                  onTagSelected={tag => handleChange('tags')([...values.tags, tag])}
+                  onTagRemoved={tag => handleChange('tags')(values.tags.filter(t => t !== tag))}
+                />
+                <SubmitButton
+                  text="Create"
+                  isSubmitting={isSubmitting}
+                  onSubmit={handleSubmit}
+                />
               </Form>
             )}
           </Formik>

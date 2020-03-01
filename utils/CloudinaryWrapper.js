@@ -1,7 +1,7 @@
 const cloudName = 'dv0qmj6vt';
 
 // eslint-disable-next-line import/prefer-default-export
-export const uploadFile = (file) => (
+export const uploadFile = file => (
   new Promise((resolve, reject) => {
     const url = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
     const xhr = new XMLHttpRequest();

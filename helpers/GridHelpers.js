@@ -3,7 +3,7 @@ import { Col, Row } from 'react-native-easy-grid';
 
 const COLUMNS = 2;
 
-export const itemsToGridArray = (items) => {
+export const itemsToGridArray = items => {
   if (items.length === 0) {
     return null;
   }
@@ -25,10 +25,10 @@ export const itemsToGridArray = (items) => {
   return gridArray;
 };
 
-export const renderGrid = (gridArray) => gridArray.map((row) => (
+export const renderGrid = gridArray => gridArray.map(row => (
   <Row key={`row_${row[0].key}`}>
     {
-      row.map((col) => (
+      row.map(col => (
         <Col key={`col_${col.key}`}>
           {col}
         </Col>

@@ -7,23 +7,16 @@ import {
   Form,
   Item,
   Input,
-  Button,
-  Text,
-  Spinner,
 } from 'native-base';
 import { Image, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as ImagePicker from 'expo-image-picker';
 import { navigationShape } from '../constants/Shapes';
+import { imagePickerOptions, getMealImageSourceWithDeafult } from '../constants/config/Defaults';
 import NumericInput from '../components/NumericInput';
+import SubmitButton from '../components/SubmitButton';
+import TagEditor from '../components/TagEditor';
 import * as OutsideMealActions from '../actionCreators/OutsideMealActions';
-
-const imagePickerOptions = {
-  // todo test video
-  allowsEditing: true,
-  aspect: [1, 1],
-  // quality
-};
 
 class NewOutsideMealScreen extends React.Component {
   constructor(props) {
@@ -44,6 +37,7 @@ class NewOutsideMealScreen extends React.Component {
 
   render() {
     const { dispatch, navigation } = this.props;
+
     return (
       <Container>
         <Content>
@@ -54,15 +48,17 @@ class NewOutsideMealScreen extends React.Component {
               price: '',
               photoUrl: '',
               imageFile: '',
+              tags: [],
             }}
             validate={() => {} /* TODO implement validation */}
-            onSubmit={(values) => {
+            onSubmit={values => {
               // TODO consider if actions.setSubmitting() is necessary
               const meal = {
                 name: values.mealName,
                 catId: 'defaultCategory',
                 price: parseFloat(values.price),
                 restaurantName: values.restaurantName,
+                tags: values.tags,
               };
               OutsideMealActions.createOutsideMeal({
                 dispatch,
@@ -79,7 +75,7 @@ class NewOutsideMealScreen extends React.Component {
               values,
               isSubmitting,
             }) => (
-              <Form>
+              <Form style={{ paddingRight: 10 }}>
                 <Item>
                   <TouchableOpacity
                     style={{
@@ -110,7 +106,12 @@ class NewOutsideMealScreen extends React.Component {
                           style={{ height: 60, width: 60 }}
                         />
                       )
-                      : null}
+                      : (
+                        <Image
+                          source={getMealImageSourceWithDeafult()}
+                          style={{ height: 60, width: 60 }}
+                        />
+                      )}
                   </TouchableOpacity>
                   <Input
                     ref={this.firstInputRef}
@@ -137,9 +138,17 @@ class NewOutsideMealScreen extends React.Component {
                     value={values.price}
                   />
                 </Item>
-                {isSubmitting
-                  ? (<Spinner color="red" />)
-                  : (<Button onPress={handleSubmit}><Text>Create</Text></Button>)}
+                <TagEditor
+                  tags={values.tags}
+                  navigation={navigation}
+                  onTagSelected={tag => handleChange('tags')([...values.tags, tag])}
+                  onTagRemoved={tag => handleChange('tags')(values.tags.filter(t => t !== tag))}
+                />
+                <SubmitButton
+                  text="Create"
+                  isSubmitting={isSubmitting}
+                  onSubmit={handleSubmit}
+                />
               </Form>
             )}
           </Formik>

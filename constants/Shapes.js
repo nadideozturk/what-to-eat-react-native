@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 export const mealShape = PropTypes.shape({
   name: PropTypes.string.isRequired,
-  photoUrl: PropTypes.string.isRequired,
+  photoUrl: PropTypes.string,
 });
 
 export const homemadeMealShape = PropTypes.shape({
@@ -37,6 +37,17 @@ export const outsideMealWithMetadataShape = PropTypes.shape({
 
 export const outsideMealListWithMetadataShape = PropTypes.shape({
   value: PropTypes.arrayOf(outsideMealShape),
+  loading: PropTypes.bool,
+  exception: PropTypes.object,
+});
+
+export const tagShape = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  tagName: PropTypes.string.isRequired,
+});
+
+export const tagListWithMetadataShape = PropTypes.shape({
+  value: PropTypes.arrayOf(tagShape),
   loading: PropTypes.bool,
   exception: PropTypes.object,
 });

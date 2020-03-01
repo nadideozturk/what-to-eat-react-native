@@ -17,7 +17,7 @@ export default class NumericInput extends React.PureComponent {
       <Input
         placeholder={placeholder}
         onBlur={onBlur}
-        onChangeText={(text) => onChangeText(text.replace(/\D/g, ''))}
+        onChangeText={text => onChangeText(text.replace(/\D/g, ''))}
         value={value}
         keyboardType="numeric"
       />

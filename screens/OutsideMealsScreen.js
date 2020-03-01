@@ -1,13 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Image, Platform } from 'react-native';
+import { Platform } from 'react-native';
 import {
   Container,
   Content,
-  Card,
-  CardItem,
   Text,
-  Body,
   Spinner,
 } from 'native-base';
 import PropTypes from 'prop-types';
@@ -17,10 +14,10 @@ import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import * as GridHelper from '../helpers/GridHelpers';
 import { navigationShape, outsideMealListWithMetadataShape } from '../constants/Shapes';
+import MealCard from '../components/MealCard';
 import * as OutsideMealActions from '../actionCreators/OutsideMealActions';
 
-const defaultMealImageUrl = 'https://res.cloudinary.com/dv0qmj6vt/image/upload/v1571892846/hbc79s2xpvxnxsbnsbwe.jpg';
-const IoniconsHeaderButton = (passMeFurther) => (
+const IoniconsHeaderButton = passMeFurther => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <HeaderButton {...passMeFurther} IconComponent={IonIcon} iconSize={32} color="black" />
 );
@@ -66,38 +63,22 @@ class OutsideMealsScreen extends React.PureComponent {
         </Container>
       );
     }
-    const items = meals.map((meal) => (
-      <Card key={meal.id}>
-        <CardItem
-          cardBody
-          button
-          onPress={() => {
-            dispatch(OutsideMealActions.setCurrentOutsideMeal(meal));
-            navigation.navigate('OutsideMealDetails');
-          }}
-        >
-          <Image
-            style={{ flex: 1, width: null, height: 200 }}
-            source={{ uri: meal.photoUrl || defaultMealImageUrl }}
-          />
-        </CardItem>
-        <CardItem
-          button
-          onPress={() => {
-            dispatch(OutsideMealActions.setCurrentOutsideMeal(meal));
-            navigation.navigate('OutsideMealDetails');
-          }}
-        >
-          <Body>
-            <Text>{`${meal.name} @ ${meal.restaurantName}`}</Text>
-          </Body>
-        </CardItem>
-      </Card>
+
+    const mealCards = meals.map(meal => (
+      <MealCard
+        key={meal.id}
+        meal={meal}
+        onPress={() => {
+          dispatch(OutsideMealActions.setCurrentOutsideMeal(meal));
+          navigation.navigate('OutsideMealDetails');
+        }}
+      />
     ));
+
     return (
       <Container>
         <Content>
-          {GridHelper.renderGrid(GridHelper.itemsToGridArray(items))}
+          {GridHelper.renderGrid(GridHelper.itemsToGridArray(mealCards))}
         </Content>
       </Container>
     );
@@ -138,7 +119,7 @@ OutsideMealsScreen.propTypes = {
   mealsWithMetadata: outsideMealListWithMetadataShape.isRequired,
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   mealsWithMetadata: state.outsideMealList,
 });
 

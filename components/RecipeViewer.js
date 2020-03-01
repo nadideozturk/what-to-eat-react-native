@@ -6,19 +6,20 @@ import {
   Icon,
   Body,
 } from 'native-base';
+import { mealShape } from '../constants/Shapes';
 
-export default class Recipe extends React.Component {
+export default class RecipeViewer extends React.Component {
   constructor(state, props) {
     super(state, props);
     this.state = {
       isClicked: false,
     };
-    this.meal = this.props;
   }
 
   render() {
+    const { meal } = this.props;
     const { isClicked } = this.state;
-    const { meal } = this.meal;
+
     if (!isClicked) {
       return (
         <CardItem>
@@ -37,14 +38,19 @@ export default class Recipe extends React.Component {
         </CardItem>
       );
     }
+
     return (
       <CardItem>
         <Body>
           <Text>
-            {meal.recipe}
+            {meal.recipe || 'No recipe yet! You can edit to add a recipe.'}
           </Text>
         </Body>
       </CardItem>
     );
   }
 }
+
+RecipeViewer.propTypes = {
+  meal: mealShape.isRequired,
+};

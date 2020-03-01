@@ -1,0 +1,69 @@
+import React from 'react';
+import { View, TouchableOpacity, Image } from 'react-native';
+import PropTypes from 'prop-types';
+import { Icon, Text, Badge, Button, Item } from 'native-base';
+import { tagShape, navigationShape } from '../constants/Shapes';
+
+export default class TagEditor extends React.PureComponent {
+  render() {
+    const { tags, navigation } = this.props;
+    const { onTagSelected, onTagRemoved } = this.props;
+
+    return (
+      <Item>
+        <View style={{ flexDirection: 'row', marginTop: 10, marginBottom: 5, flexWrap: 'wrap' }}>
+          {/* TODO re-use */}
+          <Text style={{ marginRight: 5 }}>Tags</Text>
+          {
+            tags.map(tag => (
+              <Badge
+                warning
+                key={tag.id}
+                style={{ marginRight: 3, marginBottom: 5, flexDirection: 'row' }} // TODO re-use
+              >
+                <Text>
+                  {tag.tagName}
+                </Text>
+                <TouchableOpacity
+                  onPress={() => onTagRemoved(tag)}
+                  style={{ justifyContent: 'center' }}
+                >
+                  <Image
+                    style={{ width: 15, height: 15, marginLeft: 2 }}
+                    // eslint-disable-next-line global-require
+                    source={require('../assets/images/close.png')}
+                  />
+                </TouchableOpacity>
+              </Badge>
+            ))
+          }
+          <Button
+            small
+            transparent
+            onPress={() => navigation.navigate(
+              'TagSelector',
+              {
+                onTagSelected,
+                alreadySelectedTags: tags,
+              },
+            )}
+            style={{ marginTop: -1 }}
+          >
+            <Icon
+              transparent
+              name="add-circle"
+              style={{ marginRight: 5, marginLeft: 5, fontSize: 24, color: '#303030' }}
+            />
+          </Button>
+        </View>
+      </Item>
+    );
+  }
+}
+
+TagEditor.propTypes = {
+  tags: PropTypes.arrayOf(tagShape).isRequired,
+  navigation: navigationShape.isRequired,
+  onTagSelected: PropTypes.func.isRequired,
+  onTagRemoved: PropTypes.func.isRequired,
+};

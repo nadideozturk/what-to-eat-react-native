@@ -35,7 +35,7 @@ HomemadeMealDetailsScreen.propTypes = {
   mealWithMetadata: homemadeMealWithMetadataShape.isRequired,
 };
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = state => ({
   mealWithMetadata: state.currentHomemadeMeal,
 });
 

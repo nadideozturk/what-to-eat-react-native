@@ -7,23 +7,16 @@ import {
   Form,
   Item,
   Input,
-  Button,
-  Text,
-  Spinner,
 } from 'native-base';
 import { Image, TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as ImagePicker from 'expo-image-picker';
 import { navigationShape } from '../constants/Shapes';
+import { imagePickerOptions, getMealImageSourceWithDeafult } from '../constants/config/Defaults';
+import TagEditor from '../components/TagEditor';
 import NumericInput from '../components/NumericInput';
+import SubmitButton from '../components/SubmitButton';
 import * as OutsideMealActions from '../actionCreators/OutsideMealActions';
-
-const imagePickerOptions = {
-  // todo test video
-  allowsEditing: true,
-  aspect: [1, 1],
-  // quality
-};
 
 class EditOutsideMealScreen extends React.Component {
   static navigationOptions = {
@@ -44,9 +37,10 @@ class EditOutsideMealScreen extends React.Component {
               photoUrl: meal.photoUrl,
               imageFile: meal.imageFile,
               price: String(meal.price),
+              tags: meal.tags,
             }}
             validate={() => {} /* TODO implement validation */}
-            onSubmit={async (values) => {
+            onSubmit={async values => {
               // TODO consider if actions.setSubmitting() is necessary
               const updatedMeal = {
                 ...meal,
@@ -55,6 +49,7 @@ class EditOutsideMealScreen extends React.Component {
                 catId: 'defaultCategory',
                 price: Number(values.price),
                 photoContent: 'Empty',
+                tags: values.tags,
               };
               OutsideMealActions.updateOutsideMeal({
                 dispatch,
@@ -71,7 +66,7 @@ class EditOutsideMealScreen extends React.Component {
               values,
               isSubmitting,
             }) => (
-              <Form>
+              <Form style={{ paddingRight: 10 }}>
                 <Item>
                   <TouchableOpacity
                     style={{
@@ -99,7 +94,7 @@ class EditOutsideMealScreen extends React.Component {
                       )
                       : (
                         <Image
-                          source={{ uri: meal.photoUrl }}
+                          source={getMealImageSourceWithDeafult(meal)}
                           style={{ height: 60, width: 60 }}
                         />
                       )}
@@ -132,9 +127,17 @@ class EditOutsideMealScreen extends React.Component {
                     />
                   </Item>
                 </Item>
-                {isSubmitting
-                  ? (<Spinner color="red" />)
-                  : (<Button onPress={handleSubmit}><Text>Update</Text></Button>)}
+                <TagEditor
+                  tags={values.tags}
+                  navigation={navigation}
+                  onTagSelected={tag => handleChange('tags')([...values.tags, tag])}
+                  onTagRemoved={tag => handleChange('tags')(values.tags.filter(t => t !== tag))}
+                />
+                <SubmitButton
+                  text="Update"
+                  isSubmitting={isSubmitting}
+                  onSubmit={handleSubmit}
+                />
               </Form>
             )}
           </Formik>
