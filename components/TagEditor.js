@@ -47,7 +47,6 @@ export default class TagEditor extends React.PureComponent {
                 alreadySelectedTags: tags,
               },
             )}
-            style={{ marginTop: -1 }}
           >
             <Icon
               transparent
