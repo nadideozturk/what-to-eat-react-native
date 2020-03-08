@@ -8,6 +8,7 @@ import {
   Spinner,
 } from 'native-base';
 import * as Google from 'expo-google-app-auth';
+import * as Facebook from 'expo-facebook';
 import Config from '../config.json';
 import { navigationShape } from '../constants/Shapes';
 
@@ -17,10 +18,37 @@ export default class SignInScreen extends React.Component {
     this.state = {
       inProgress: false,
     };
-    this.signInAsync = this.signInAsync.bind(this);
+    this.googleSignInAsync = this.googleSignInAsync.bind(this);
+    this.facebookSignInAsync = this.facebookSignInAsync.bind(this);
+    this.onSuccessfulLogin = this.onSuccessfulLogin.bind(this);
   }
 
-  signInAsync = async () => {
+  onSuccessfulLogin = async (idToken, navigation) => {
+    await AsyncStorage.setItem('idToken', idToken);
+    navigation.navigate('App');
+  }
+
+  facebookSignInAsync = async () => {
+    this.setState({ inProgress: true });
+    const { navigation } = this.props;
+
+    try {
+      await Facebook.initializeAsync(Config.facebookAppId);
+      const fbResponse = await Facebook.logInWithReadPermissionsAsync({
+        permissions: ['public_profile'],
+      });
+      const { type, token } = fbResponse;
+      if (type === 'success') {
+        this.setState({ inProgress: false });
+        await this.onSuccessfulLogin(token, navigation);
+      }
+    } catch (e) {
+      this.setState({ inProgress: false });
+      alert(`Facebook login failed: ${e.message}`);
+    }
+  }
+
+  googleSignInAsync = async () => {
     this.setState({ inProgress: true });
     const { navigation } = this.props;
 
@@ -33,22 +61,16 @@ export default class SignInScreen extends React.Component {
     // Google.logInAsync and react rendering which freezes the screen
     // for about one second, until Google SSO page opens
     setTimeout(async () => {
-      // First- obtain access token from Expo's Google API
-      const { type, idToken } = await Google.logInAsync(config);
-
-      // console.log("user object is " + JSON.stringify(user));
-      // console.log("logInAsync response: " + JSON.stringify(test));
-
-      if (type === 'success') {
-        await AsyncStorage.setItem('idToken', idToken);
-        navigation.navigate('App');
-
-        // Then you can use the Google REST API
-        // let userInfoResponse = await fetch('https://www.googleapis.com/userinfo/v2/me', {
-        //   headers: { Authorization: `Bearer ${accessToken}` },
-        // });
+      try {
+        const { type, idToken } = await Google.logInAsync(config);
+        if (type === 'success') {
+          this.setState({ inProgress: false });
+          await this.onSuccessfulLogin(idToken, navigation);
+        }
+      } catch (e) {
+        this.setState({ inProgress: false });
+        alert(`Google login failed: ${e.message}`);
       }
-      this.setState({ inProgress: false });
     }, 50);
   };
 
@@ -87,13 +109,17 @@ export default class SignInScreen extends React.Component {
               />
               {/* eslint-disable-next-line no-underscore-dangle */}
               <Button
+                onPress={this.googleSignInAsync}
                 style={{ backgroundColor: '#fef2f2', justifyContent: 'center', marginBottom: 10 }}
                 light
-                onPress={this.signInAsync}
               >
                 <Text>Sign in with Google</Text>
               </Button>
-              <Button style={{ backgroundColor: '#fef2f2', justifyContent: 'center', marginBottom: 10 }} light>
+              <Button
+                onPress={this.facebookSignInAsync}
+                style={{ backgroundColor: '#fef2f2', justifyContent: 'center', marginBottom: 10 }}
+                light
+              >
                 <Text>Sign in with Facebook</Text>
               </Button>
               <Button style={{ justifyContent: 'center' }} dark transparent>
