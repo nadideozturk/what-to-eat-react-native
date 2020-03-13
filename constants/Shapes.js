@@ -55,3 +55,15 @@ export const tagListWithMetadataShape = PropTypes.shape({
 export const navigationShape = PropTypes.shape({
   navigate: PropTypes.func.isRequired,
 });
+
+export const userDetailsShape = PropTypes.shape({
+  id: PropTypes.string.isRequired,
+  photoUrl: PropTypes.string.isRequired,
+  isPrivate: PropTypes.bool.isRequired,
+});
+
+export const userDetailsWithMetaDataShape = PropTypes.shape({
+  value: userDetailsShape.isRequired,
+  loading: PropTypes.bool,
+  exception: PropTypes.object,
+});

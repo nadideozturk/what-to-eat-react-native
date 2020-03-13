@@ -40,7 +40,8 @@
     "react-navigation-header-buttons": "^3.0.2",
     "react-redux": "^7.1.3",
     "redux": "^4.0.5",
-    "expo-facebook": "~8.0.0"
+    "expo-facebook": "~8.0.0",
+    "expo-location": "~8.0.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^8.0.0",

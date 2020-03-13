@@ -14,6 +14,7 @@ import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import * as HomemadeMealActions from '../actionCreators/HomemadeMealActions';
 import * as TagActions from '../actionCreators/TagActions';
+import * as UserActions from '../actionCreators/UserActions';
 import * as GridHelper from '../helpers/GridHelpers';
 import { navigationShape, homemadeMealListWithMetadataShape } from '../constants/Shapes';
 import MealCard from '../components/MealCard';
@@ -28,6 +29,7 @@ class HomemadeMealsScreen extends React.PureComponent {
     const { dispatch } = this.props;
     HomemadeMealActions.fetchHomemadeMealList(dispatch);
     TagActions.fetchTags(dispatch);
+    UserActions.fetchUserDetails(dispatch);
 
     const { navigation } = this.props;
     this.willFocusSubscription = navigation.addListener(

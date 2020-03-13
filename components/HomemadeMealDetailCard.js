@@ -11,7 +11,7 @@ import {
   Thumbnail,
   ActionSheet,
 } from 'native-base';
-import { mealShape, navigationShape } from '../constants/Shapes';
+import { mealShape, navigationShape, userDetailsWithMetaDataShape } from '../constants/Shapes';
 import { getMealImageSourceWithDeafult } from '../constants/config/Defaults';
 import RecipeViewer from './RecipeViewer';
 import TagViewer from './TagViewer';
@@ -23,14 +23,15 @@ const CANCEL_INDEX = 2;
 
 class HomemadeMealDetailCard extends React.PureComponent {
   render() {
-    const { meal, navigation, dispatch } = this.props;
+    const { meal, navigation, dispatch, userDetailsWithMetadata } = this.props;
+    const userPhotoUrl = userDetailsWithMetadata.value.photoUrl;
 
     return (
       <Card>
         <CardItem style={{ justifyContent: 'space-between' }}>
           <Thumbnail
             small
-            source={{ uri: 'https://lh3.googleusercontent.com/a-/AAuE7mBiYdQO-W32CcREhzqJ8tH1XfM_R7JPaktervK3' }}
+            source={{ uri: userPhotoUrl }}
             style={{ marginLeft: -6, marginRight: 10 }}
           />
           <View style={{ flexDirection: 'column', flex: 1 }}>
@@ -102,6 +103,11 @@ HomemadeMealDetailCard.propTypes = {
   meal: mealShape.isRequired,
   navigation: navigationShape.isRequired,
   dispatch: PropTypes.func.isRequired,
+  userDetailsWithMetadata: userDetailsWithMetaDataShape.isRequired,
 };
 
-export default connect()(HomemadeMealDetailCard);
+const mapStateToProps = state => ({
+  userDetailsWithMetadata: state.userDetails,
+});
+
+export default connect(mapStateToProps)(HomemadeMealDetailCard);

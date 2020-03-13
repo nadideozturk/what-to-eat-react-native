@@ -4,6 +4,7 @@ import HomemadeMealReducer from './HomemadeMealReducer';
 import OutsideMealListReducer from './OutsideMealListReducer';
 import OutsideMealReducer from './OutsideMealReducer';
 import TagReducer from './TagReducer';
+import UserDetailsReducer from './UserDetailsReducer';
 
 export const initialState = {};
 
@@ -14,5 +15,6 @@ export default combineReducers(
     outsideMealList: OutsideMealListReducer,
     currentOutsideMeal: OutsideMealReducer,
     tags: TagReducer,
+    userDetails: UserDetailsReducer,
   },
 );
