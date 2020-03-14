@@ -1,10 +1,6 @@
 import React from 'react';
-import {
-  View,
-  Text,
-} from 'react-native';
 import * as Permissions from 'expo-permissions';
-import { Button } from 'native-base';
+import { Container, Header, Body, Item, Input, Icon, Button, Text } from 'native-base';
 import * as Location from 'expo-location';
 
 export default class ExploreScreen extends React.Component {
@@ -30,22 +26,31 @@ export default class ExploreScreen extends React.Component {
   };
 
   static navigationOptions = {
-    title: 'Explore',
+    header: null,
   };
 
   render() {
     const { location } = this.state;
 
     return (
-      <View>
-        <Text>
-        Explore Tab
-        </Text>
-        <Button onPress={this.getLocationAsync}>
-          <Text>OK</Text>
-        </Button>
-        <Text>{JSON.stringify(location)}</Text>
-      </View>
+      <Container>
+        <Header searchBar rounded>
+          <Item>
+            <Icon name="ios-search" />
+            <Input placeholder="Search" />
+            <Icon name="ios-people" />
+          </Item>
+          <Button transparent>
+            <Text>Search</Text>
+          </Button>
+        </Header>
+        <Body>
+          <Button onPress={this.getLocationAsync}>
+            <Text>OK</Text>
+          </Button>
+          <Text>{JSON.stringify(location)}</Text>
+        </Body>
+      </Container>
     );
   }
 }
