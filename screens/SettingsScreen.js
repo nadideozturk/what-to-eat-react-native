@@ -1,6 +1,6 @@
 import React from 'react';
 import { AsyncStorage, Alert } from 'react-native';
-import { Container, Content, Button, ListItem, Text, Icon, Left, Body, Right, Switch } from 'native-base';
+import { Container, Content, Button, ListItem, Text, Icon, Left, Body, Right, Switch, Spinner } from 'native-base';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as UserActions from '../actionCreators/UserActions';
@@ -64,9 +64,17 @@ class SettingsScreen extends React.Component {
   };
 
   render() {
-    const { dispatch, userDetailsWithMetadata } = this.props;
+    const { userDetailsWithMetadata } = this.props;
+    if (userDetailsWithMetadata.loading) {
+      return (
+        <Spinner color="red" />
+      );
+    }
+    if (typeof (userDetailsWithMetadata.value) === 'undefined') {
+      return null;
+    }
     const { isPrivate } = userDetailsWithMetadata.value;
-    console.log(isPrivate);
+
     return (
       <Container>
         <Content>

@@ -63,7 +63,7 @@ export const userDetailsShape = PropTypes.shape({
 });
 
 export const userDetailsWithMetaDataShape = PropTypes.shape({
-  value: userDetailsShape.isRequired,
+  value: userDetailsShape,
   loading: PropTypes.bool,
   exception: PropTypes.object,
 });

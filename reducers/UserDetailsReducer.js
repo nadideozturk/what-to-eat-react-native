@@ -3,6 +3,7 @@ import * as actionTypes from '../constants/ActionTypes';
 export default function reducer(state = {}, action) {
   switch (action.type) {
     case actionTypes.FETCH_USERDETAILS_START:
+    case actionTypes.SET_USER_PREFERECES_START:
       return {
         loading: true,
       };
@@ -13,6 +14,7 @@ export default function reducer(state = {}, action) {
         value: action.response.data,
       };
     case actionTypes.FETCH_USERDETAILS_FAIL:
+    case actionTypes.SET_USER_PREFERECES_FAIL:
       return {
         loading: false,
         exception: action.exception,
