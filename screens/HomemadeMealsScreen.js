@@ -1,13 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Platform, View } from 'react-native';
+import { Platform } from 'react-native';
 import {
   Container,
   Content,
   Text,
   Spinner,
-  Icon,
-  Input,
 } from 'native-base';
 import PropTypes from 'prop-types';
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -20,6 +18,7 @@ import * as UserActions from '../actionCreators/UserActions';
 import * as GridHelper from '../helpers/GridHelpers';
 import { navigationShape, homemadeMealListWithMetadataShape } from '../constants/Shapes';
 import MealCard from '../components/MealCard';
+import SearchBox from '../components/SearchBox';
 import { filterMealsByName } from '../utils/MealFilter';
 
 const IoniconsHeaderButton = passMeFurther => (
@@ -88,13 +87,9 @@ class HomemadeMealsScreen extends React.Component {
     return (
       <Container>
         <Content>
-          <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20, marginRight: 20 }}>
-            <Icon name="search" />
-            <Input
-              placeholder="Search"
-              onChangeText={value => this.setState({ searchQuery: value })}
-            />
-          </View>
+          <SearchBox
+            onChangeText={value => this.setState({ searchQuery: value })}
+          />
           { filteredMeals.length
             ? GridHelper.renderGrid(GridHelper.itemsToGridArray(mealCards))
             : (<Text>No meals found!</Text>)}
