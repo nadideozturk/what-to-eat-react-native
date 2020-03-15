@@ -1,11 +1,13 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 import {
   Container,
   Content,
   Text,
   Spinner,
+  Icon,
+  Input,
 } from 'native-base';
 import PropTypes from 'prop-types';
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -18,13 +20,21 @@ import * as UserActions from '../actionCreators/UserActions';
 import * as GridHelper from '../helpers/GridHelpers';
 import { navigationShape, homemadeMealListWithMetadataShape } from '../constants/Shapes';
 import MealCard from '../components/MealCard';
+import { filterMealsByName } from '../utils/MealFilter';
 
 const IoniconsHeaderButton = passMeFurther => (
   // eslint-disable-next-line react/jsx-props-no-spreading
   <HeaderButton {...passMeFurther} IconComponent={IonIcon} iconSize={32} color="black" />
 );
 
-class HomemadeMealsScreen extends React.PureComponent {
+class HomemadeMealsScreen extends React.Component {
+  constructor(props, state) {
+    super(props, state);
+    this.state = {
+      searchQuery: undefined,
+    };
+  }
+
   async componentDidMount() {
     const { dispatch } = this.props;
     HomemadeMealActions.fetchHomemadeMealList(dispatch);
@@ -44,6 +54,7 @@ class HomemadeMealsScreen extends React.PureComponent {
   render() {
     const { navigation, dispatch } = this.props;
     const { mealsWithMetadata } = this.props;
+    const { searchQuery } = this.state;
 
     if (mealsWithMetadata.loading) {
       return (
@@ -62,17 +73,8 @@ class HomemadeMealsScreen extends React.PureComponent {
       return null;
     }
 
-    if (meals.length === 0) {
-      return (
-        <Container>
-          <Content>
-            <Text>Hic yemek yok yemek yap lo!</Text>
-          </Content>
-        </Container>
-      );
-    }
-
-    const mealCards = meals.map(meal => (
+    const filteredMeals = filterMealsByName(meals, searchQuery);
+    const mealCards = filteredMeals.map(meal => (
       <MealCard
         key={meal.id}
         meal={meal}
@@ -86,7 +88,16 @@ class HomemadeMealsScreen extends React.PureComponent {
     return (
       <Container>
         <Content>
-          {GridHelper.renderGrid(GridHelper.itemsToGridArray(mealCards))}
+          <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 20, marginRight: 20 }}>
+            <Icon name="search" />
+            <Input
+              placeholder="Search"
+              onChangeText={value => this.setState({ searchQuery: value })}
+            />
+          </View>
+          { filteredMeals.length
+            ? GridHelper.renderGrid(GridHelper.itemsToGridArray(mealCards))
+            : (<Text>No meals found!</Text>)}
         </Content>
       </Container>
     );
