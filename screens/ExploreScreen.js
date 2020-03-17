@@ -1,7 +1,8 @@
 import React from 'react';
 import * as Permissions from 'expo-permissions';
-import { Container, Header, Body, Item, Input, Icon, Button, Text } from 'native-base';
 import * as Location from 'expo-location';
+import Explore from '../components/explore/Explore';
+import ExploreGpsDisabled from '../components/explore/ExploreGpsDisabled';
 
 export default class ExploreScreen extends React.Component {
   constructor(props) {
@@ -9,20 +10,26 @@ export default class ExploreScreen extends React.Component {
     this.state = {
       location: null,
       errorMessage: null,
+      hasLocationPermssion: undefined,
     };
   }
 
-  getLocationAsync = async () => {
+  async componentDidMount() {
+    const { status } = await Permissions.getAsync(Permissions.LOCATION);
+    const hasLocationPermssion = status === 'granted';
+    this.setState({ hasLocationPermssion });
+    if (hasLocationPermssion) {
+      const location = await Location.getCurrentPositionAsync({});
+      this.setState({ location });
+    }
+  }
+
+  getPermissionAsync = async () => {
     const { status } = await Permissions.askAsync(Permissions.LOCATION);
     if (status !== 'granted') {
-      this.setState({
-        errorMessage: 'Permission to access location was denied',
-      });
+      return false;
     }
-
-    const location = await Location.getCurrentPositionAsync({});
-    console.log(location);
-    this.setState({ location });
+    return true;
   };
 
   static navigationOptions = {
@@ -30,27 +37,20 @@ export default class ExploreScreen extends React.Component {
   };
 
   render() {
-    const { location } = this.state;
+    const { hasLocationPermssion, location } = this.state;
 
+    if (!hasLocationPermssion) {
+      return (
+        <ExploreGpsDisabled
+          onLocationPermissionChanged={value => this.setState({ hasLocationPermssion: value })}
+          onLocationChanged={value => this.setState({ location: value })}
+        />
+      );
+    }
     return (
-      <Container>
-        <Header searchBar rounded>
-          <Item>
-            <Icon name="ios-search" />
-            <Input placeholder="Search" />
-            <Icon name="ios-people" />
-          </Item>
-          <Button transparent>
-            <Text>Search</Text>
-          </Button>
-        </Header>
-        <Body>
-          <Button onPress={this.getLocationAsync}>
-            <Text>OK</Text>
-          </Button>
-          <Text>{JSON.stringify(location)}</Text>
-        </Body>
-      </Container>
+      <Explore
+        location={location}
+      />
     );
   }
 }
