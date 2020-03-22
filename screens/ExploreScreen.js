@@ -1,8 +1,10 @@
 import React from 'react';
+import { Header, Body, Container, Content, Card, CardItem, Text } from 'native-base';
+import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import * as Location from 'expo-location';
 import Explore from '../components/explore/Explore';
-import ExploreGpsDisabled from '../components/explore/ExploreGpsDisabled';
+import { navigationShape } from '../constants/Shapes';
 
 export default class ExploreScreen extends React.Component {
   constructor(props) {
@@ -10,47 +12,65 @@ export default class ExploreScreen extends React.Component {
     this.state = {
       location: null,
       errorMessage: null,
-      hasLocationPermssion: undefined,
+      hasLocationPermssion: 'undetermined',
     };
   }
 
   async componentDidMount() {
-    const { status } = await Permissions.getAsync(Permissions.LOCATION);
-    const hasLocationPermssion = status === 'granted';
-    this.setState({ hasLocationPermssion });
-    if (hasLocationPermssion) {
-      const location = await Location.getCurrentPositionAsync({});
-      this.setState({ location });
-    }
+    const { navigation } = this.props;
+    this.willFocusSubscription = navigation.addListener(
+      'willFocus',
+      async () => {
+        const { status } = await Permissions.askAsync(Permissions.LOCATION);
+        console.log(status);
+        this.setState({ hasLocationPermssion: status });
+        if (status === 'granted') {
+          const location = await Location.getCurrentPositionAsync({});
+          this.setState({ location });
+        }
+      },
+    );
   }
 
-  getPermissionAsync = async () => {
-    const { status } = await Permissions.askAsync(Permissions.LOCATION);
-    if (status !== 'granted') {
-      return false;
-    }
-    return true;
-  };
-
   static navigationOptions = {
-    header: null,
+    header: Constants.platform.ios ? null : undefined,
+    title: Constants.platform.ios ? null : 'Explore',
   };
 
   render() {
     const { hasLocationPermssion, location } = this.state;
 
-    if (!hasLocationPermssion) {
+    if (hasLocationPermssion === 'granted') {
       return (
-        <ExploreGpsDisabled
-          onLocationPermissionChanged={value => this.setState({ hasLocationPermssion: value })}
-          onLocationChanged={value => this.setState({ location: value })}
+        <Explore
+          location={location}
         />
       );
     }
     return (
-      <Explore
-        location={location}
-      />
+      <Container>
+        <Header />
+        <Content padder>
+          <Card>
+            <CardItem header>
+              <Text style={{ fontSize: 40, paddingRight: 5 }}>🙈</Text>
+              <Text>Please Allow Access to Your Location</Text>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Text>
+                  This allows WhatToEat to know your location and show to recommendations based on what others people eating currently in your area.
+                  Please give permission from settings. Enable location permission from settings.
+                </Text>
+              </Body>
+            </CardItem>
+          </Card>
+        </Content>
+      </Container>
     );
   }
 }
+
+ExploreScreen.propTypes = {
+  navigation: navigationShape.isRequired,
+};
