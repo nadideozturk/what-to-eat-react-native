@@ -15,6 +15,7 @@ import CameraRollPermissionRequestOutScreen from '../screens/CameraRollPermissio
 import EditHomemadeMealScreen from '../screens/EditHomemadeMealScreen';
 import EditOutsideMealScreen from '../screens/EditOutsideMealScreen';
 import TagSelectorScreen from '../screens/TagSelectorScreen';
+import CityCountrySelectorScreen from '../screens/CityCountrySelectorScreen';
 
 const config = Platform.select({
   web: { headerMode: 'screen' },
@@ -118,6 +119,7 @@ ExploreStack.path = '';
 const SettingsStack = createStackNavigator(
   {
     Settings: SettingsScreen,
+    CityCountrySelector: CityCountrySelectorScreen,
   },
   config,
 );

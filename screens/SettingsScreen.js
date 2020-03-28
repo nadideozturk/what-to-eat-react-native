@@ -7,15 +7,20 @@ import * as UserActions from '../actionCreators/UserActions';
 import { navigationShape, userDetailsWithMetaDataShape } from '../constants/Shapes';
 
 class SettingsScreen extends React.Component {
-  _signOutAsync = async () => {
+  signOutAsync = async () => {
     const { navigation } = this.props;
 
     await AsyncStorage.clear();
     navigation.navigate('Auth');
+
+    this.toggleSwitch = this.toggleSwitch.bind(this);
+    this.changeCityCountry = this.changeCityCountry.bind(this);
   };
 
   toggleSwitch = (value) => {
     const { dispatch } = this.props;
+    const { userDetailsWithMetadata } = this.props;
+    const userDetails = userDetailsWithMetadata.value;
 
     if (!value) {
       Alert.alert(
@@ -27,6 +32,7 @@ class SettingsScreen extends React.Component {
             onPress: () => UserActions.setUserPreferences({
               dispatch,
               user: {
+                ...userDetails,
                 isPrivate: false,
               },
             }),
@@ -44,6 +50,7 @@ class SettingsScreen extends React.Component {
             onPress: () => UserActions.setUserPreferences({
               dispatch,
               user: {
+                ...userDetails,
                 isPrivate: true,
               },
             }),
@@ -59,12 +66,27 @@ class SettingsScreen extends React.Component {
     }
   }
 
+  changeCityCountry = selectedCityCountry => {
+    const { dispatch } = this.props;
+    const { userDetailsWithMetadata } = this.props;
+    const userDetails = userDetailsWithMetadata.value;
+
+    UserActions.setUserPreferences({
+      dispatch,
+      user: {
+        ...userDetails,
+        city: selectedCityCountry.city,
+        country: selectedCityCountry.country,
+      },
+    });
+  }
+
   static navigationOptions = {
     title: 'Settings',
   };
 
   render() {
-    const { userDetailsWithMetadata } = this.props;
+    const { userDetailsWithMetadata, navigation } = this.props;
     if (userDetailsWithMetadata.loading) {
       return (
         <Spinner color="red" />
@@ -74,6 +96,8 @@ class SettingsScreen extends React.Component {
       return null;
     }
     const { isPrivate } = userDetailsWithMetadata.value;
+    const { city } = userDetailsWithMetadata.value;
+    const { country } = userDetailsWithMetadata.value;
 
     return (
       <Container>
@@ -94,7 +118,31 @@ class SettingsScreen extends React.Component {
               />
             </Right>
           </ListItem>
-          <ListItem icon>
+          <ListItem
+            icon
+            onPress={() => navigation.navigate(
+              'CityCountrySelector',
+              {
+                onCityCountrySelected: this.changeCityCountry,
+              },
+            )}
+          >
+            <Left>
+              <Button style={{ backgroundColor: '#FF9501' }}>
+                <Icon active name="pin" />
+              </Button>
+            </Left>
+            <Body>
+              <Text>
+                {
+                  city && country
+                    ? `City: ${city}, ${country}`
+                    : 'City: Select a city'
+                }
+              </Text>
+            </Body>
+          </ListItem>
+          <ListItem icon onPress={this.signOutAsync}>
             <Left>
               <Button style={{ backgroundColor: '#007AFF' }}>
                 <Icon active name="ios-log-out" />
@@ -103,12 +151,6 @@ class SettingsScreen extends React.Component {
             <Body>
               <Text>Log Out</Text>
             </Body>
-            <Right>
-              {/* eslint-disable-next-line no-underscore-dangle */}
-              <Button onPress={this._signOutAsync}>
-                <Text>OK</Text>
-              </Button>
-            </Right>
           </ListItem>
         </Content>
       </Container>

@@ -52,6 +52,17 @@ export const tagListWithMetadataShape = PropTypes.shape({
   exception: PropTypes.object,
 });
 
+const cityCountryShape = PropTypes.shape({
+  city: PropTypes.string.isRequired,
+  country: PropTypes.string.isRequired,
+});
+
+export const cityCountryListWithMetadataShape = PropTypes.shape({
+  value: PropTypes.arrayOf(cityCountryShape),
+  loading: PropTypes.bool,
+  exception: PropTypes.object,
+});
+
 export const navigationShape = PropTypes.shape({
   navigate: PropTypes.func.isRequired,
 });
@@ -60,6 +71,8 @@ export const userDetailsShape = PropTypes.shape({
   id: PropTypes.string.isRequired,
   photoUrl: PropTypes.string.isRequired,
   isPrivate: PropTypes.bool.isRequired,
+  city: PropTypes.string,
+  country: PropTypes.string,
 });
 
 export const userDetailsWithMetaDataShape = PropTypes.shape({

@@ -14,6 +14,7 @@ import Constants from 'expo-constants';
 import * as Permissions from 'expo-permissions';
 import * as HomemadeMealActions from '../actionCreators/HomemadeMealActions';
 import * as TagActions from '../actionCreators/TagActions';
+import * as CityCountryActions from '../actionCreators/CityCountryActions';
 import * as UserActions from '../actionCreators/UserActions';
 import * as GridHelper from '../helpers/GridHelpers';
 import { navigationShape, homemadeMealListWithMetadataShape } from '../constants/Shapes';
@@ -37,6 +38,7 @@ class HomemadeMealsScreen extends React.Component {
   async componentDidMount() {
     const { dispatch } = this.props;
     TagActions.fetchTags(dispatch);
+    CityCountryActions.fetchCityCountryList(dispatch);
     UserActions.fetchUserDetails(dispatch);
 
     const { navigation } = this.props;

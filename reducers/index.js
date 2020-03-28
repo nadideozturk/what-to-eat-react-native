@@ -4,6 +4,7 @@ import HomemadeMealReducer from './HomemadeMealReducer';
 import OutsideMealListReducer from './OutsideMealListReducer';
 import OutsideMealReducer from './OutsideMealReducer';
 import TagReducer from './TagReducer';
+import CityCountryReducer from './CityCountryReducer';
 import UserDetailsReducer from './UserDetailsReducer';
 
 export const initialState = {};
@@ -15,6 +16,7 @@ export default combineReducers(
     outsideMealList: OutsideMealListReducer,
     currentOutsideMeal: OutsideMealReducer,
     tags: TagReducer,
+    cityCountryList: CityCountryReducer,
     userDetails: UserDetailsReducer,
   },
 );
