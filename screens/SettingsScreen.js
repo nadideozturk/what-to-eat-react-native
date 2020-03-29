@@ -17,7 +17,7 @@ class SettingsScreen extends React.Component {
     this.changeCityCountry = this.changeCityCountry.bind(this);
   };
 
-  toggleSwitch = (value) => {
+  toggleSwitch = value => {
     const { dispatch } = this.props;
     const { userDetailsWithMetadata } = this.props;
     const userDetails = userDetailsWithMetadata.value;

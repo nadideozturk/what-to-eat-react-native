@@ -92,6 +92,7 @@ OutsideMealsStack.path = '';
 const ExploreStack = createStackNavigator(
   {
     Explore: ExploreScreen,
+    CityCountrySelector: CityCountrySelectorScreen,
   },
   config,
 );

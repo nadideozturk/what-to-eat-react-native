@@ -1,11 +1,8 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import { Content, Container, Header, Item, Icon, Input, Button, Text } from 'native-base';
 
 export default class Explore extends React.PureComponent {
   render() {
-    const { location } = this.props;
-
     return (
       <Container>
         <Header searchBar rounded>
@@ -20,14 +17,10 @@ export default class Explore extends React.PureComponent {
         </Header>
         <Content padder>
           <Text>
-            {`Explore for ${JSON.stringify(location)}`}
+            Meals here
           </Text>
         </Content>
       </Container>
     );
   }
 }
-
-Explore.propTypes = {
-  location: PropTypes.object,
-};

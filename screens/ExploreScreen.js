@@ -1,35 +1,31 @@
 import React from 'react';
-import { Header, Body, Container, Content, Card, CardItem, Text } from 'native-base';
+import { Container, Content, Text, Spinner, Button } from 'native-base';
 import Constants from 'expo-constants';
-import * as Permissions from 'expo-permissions';
-import * as Location from 'expo-location';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import * as UserActions from '../actionCreators/UserActions';
+import { navigationShape, userDetailsWithMetaDataShape } from '../constants/Shapes';
 import Explore from '../components/explore/Explore';
-import { navigationShape } from '../constants/Shapes';
 
-export default class ExploreScreen extends React.Component {
+class ExploreScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      location: null,
-      errorMessage: null,
-      hasLocationPermssion: 'undetermined',
-    };
+    this.changeCityCountry = this.changeCityCountry.bind(this);
   }
 
-  async componentDidMount() {
-    const { navigation } = this.props;
-    this.willFocusSubscription = navigation.addListener(
-      'willFocus',
-      async () => {
-        const { status } = await Permissions.askAsync(Permissions.LOCATION);
-        console.log(status);
-        this.setState({ hasLocationPermssion: status });
-        if (status === 'granted') {
-          const location = await Location.getCurrentPositionAsync({});
-          this.setState({ location });
-        }
+  changeCityCountry = selectedCityCountry => {
+    const { dispatch } = this.props;
+    const { userDetailsWithMetadata } = this.props;
+    const userDetails = userDetailsWithMetadata.value;
+
+    UserActions.setUserPreferences({
+      dispatch,
+      user: {
+        ...userDetails,
+        city: selectedCityCountry.city,
+        country: selectedCityCountry.country,
       },
-    );
+    });
   }
 
   static navigationOptions = {
@@ -38,39 +34,52 @@ export default class ExploreScreen extends React.Component {
   };
 
   render() {
-    const { hasLocationPermssion, location } = this.state;
-
-    if (hasLocationPermssion === 'granted') {
+    const { userDetailsWithMetadata, navigation } = this.props;
+    if (userDetailsWithMetadata.loading) {
       return (
-        <Explore
-          location={location}
-        />
+        <Spinner color="red" />
       );
     }
+    if (typeof (userDetailsWithMetadata.value) === 'undefined') {
+      return null;
+    }
+    const { city } = userDetailsWithMetadata.value;
+    const { country } = userDetailsWithMetadata.value;
+
+    if (!city || !country) {
+      return (
+        <Container>
+          <Content padder>
+            <Text>Please choose a city</Text>
+            <Button
+              onPress={() => navigation.navigate(
+                'CityCountrySelector',
+                {
+                  onCityCountrySelected: this.changeCityCountry,
+                },
+              )}
+            >
+              <Text>Choose</Text>
+            </Button>
+          </Content>
+        </Container>
+      );
+    }
+
     return (
-      <Container>
-        <Header />
-        <Content padder>
-          <Card>
-            <CardItem header>
-              <Text style={{ fontSize: 40, paddingRight: 5 }}>🙈</Text>
-              <Text>Please Allow Access to Your Location</Text>
-            </CardItem>
-            <CardItem>
-              <Body>
-                <Text>
-                  This allows WhatToEat to know your location and show to recommendations based on what others people eating currently in your area.
-                  Please give permission from settings. Enable location permission from settings.
-                </Text>
-              </Body>
-            </CardItem>
-          </Card>
-        </Content>
-      </Container>
+      <Explore />
     );
   }
 }
 
 ExploreScreen.propTypes = {
   navigation: navigationShape.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  userDetailsWithMetadata: userDetailsWithMetaDataShape.isRequired,
 };
+
+const mapStateToProps = state => ({
+  userDetailsWithMetadata: state.userDetails,
+});
+
+export default connect(mapStateToProps)(ExploreScreen);
