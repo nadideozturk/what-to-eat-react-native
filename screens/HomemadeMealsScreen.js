@@ -45,8 +45,6 @@ class HomemadeMealsScreen extends React.Component {
     this.willFocusSubscription = navigation.addListener(
       'willFocus',
       () => {
-        // TODO make sure this still works, e.g. when coming back from create use case
-        // TODO double fetch?
         HomemadeMealActions.fetchHomemadeMealList(dispatch);
       },
     );

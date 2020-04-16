@@ -67,7 +67,9 @@ class ExploreScreen extends React.Component {
     }
 
     return (
-      <Explore />
+      <Explore
+        navigation={navigation}
+      />
     );
   }
 }

@@ -1,6 +1,8 @@
 import { combineReducers } from 'redux';
 import HomeadeMealListReducer from './HomemadeMealListReducer';
 import HomemadeMealReducer from './HomemadeMealReducer';
+import ExploreHomemadeReducer from './ExploreHomemadeReducer';
+import ExploreOutsideReducer from './ExploreOutsideReducer';
 import OutsideMealListReducer from './OutsideMealListReducer';
 import OutsideMealReducer from './OutsideMealReducer';
 import TagReducer from './TagReducer';
@@ -18,5 +20,7 @@ export default combineReducers(
     tags: TagReducer,
     cityCountryList: CityCountryReducer,
     userDetails: UserDetailsReducer,
+    exploreHomemadeMealList: ExploreHomemadeReducer,
+    exploreOutsideMealList: ExploreOutsideReducer,
   },
 );
