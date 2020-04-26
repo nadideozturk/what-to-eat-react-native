@@ -1,3 +1,4 @@
+import { error } from '../utils/ErrorHandler';
 import * as actionTypes from '../constants/ActionTypes';
 
 export default function reducer(state = {}, action) {
@@ -12,6 +13,7 @@ export default function reducer(state = {}, action) {
         value: action.response.data,
       };
     case actionTypes.FETCH_TAGS_FAIL:
+      error('Failed to retrieve tags');
       return {
         loading: false,
         exception: action.exception,

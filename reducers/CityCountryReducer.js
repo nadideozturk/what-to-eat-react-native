@@ -1,4 +1,5 @@
 import * as actionTypes from '../constants/ActionTypes';
+import { error } from '../utils/ErrorHandler';
 
 export default function reducer(state = {}, action) {
   switch (action.type) {
@@ -12,6 +13,7 @@ export default function reducer(state = {}, action) {
         value: action.response.data,
       };
     case actionTypes.FETCH_CITY_COUNTRY_LIST_FAIL:
+      error('Failed to retrieve city list');
       return {
         loading: false,
         exception: action.exception,

@@ -1,4 +1,5 @@
 import * as actionTypes from '../constants/ActionTypes';
+import { error } from '../utils/ErrorHandler';
 
 export default function reducer(state = {}, action) {
   switch (action.type) {
@@ -14,7 +15,13 @@ export default function reducer(state = {}, action) {
         value: action.response.data,
       };
     case actionTypes.FETCH_USERDETAILS_FAIL:
+      error('Failed to retrieve user preferences');
+      return {
+        loading: false,
+        exception: action.exception,
+      };
     case actionTypes.SET_USER_PREFERECES_FAIL:
+      error('Failed to change user preferences');
       return {
         loading: false,
         exception: action.exception,
