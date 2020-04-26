@@ -1,11 +1,12 @@
 import React from 'react';
-import { Container, Content, Text, Spinner, Button } from 'native-base';
+import { Container, Content, Text, Button } from 'native-base';
 import Constants from 'expo-constants';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import * as UserActions from '../actionCreators/UserActions';
 import { navigationShape, userDetailsWithMetaDataShape } from '../constants/Shapes';
 import Explore from '../components/explore/Explore';
+import Spinner from '../components/Spinner';
 
 class ExploreScreen extends React.Component {
   constructor(props) {
@@ -37,7 +38,7 @@ class ExploreScreen extends React.Component {
     const { userDetailsWithMetadata, navigation } = this.props;
     if (userDetailsWithMetadata.loading) {
       return (
-        <Spinner color="red" />
+        <Spinner />
       );
     }
     if (typeof (userDetailsWithMetadata.value) === 'undefined') {

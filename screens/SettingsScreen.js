@@ -1,10 +1,11 @@
 import React from 'react';
 import { AsyncStorage, Alert } from 'react-native';
-import { Container, Content, Button, ListItem, Text, Icon, Left, Body, Right, Switch, Spinner } from 'native-base';
+import { Container, Content, Button, ListItem, Text, Icon, Left, Body, Right, Switch } from 'native-base';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import * as UserActions from '../actionCreators/UserActions';
 import { navigationShape, userDetailsWithMetaDataShape } from '../constants/Shapes';
+import Spinner from '../components/Spinner';
 
 class SettingsScreen extends React.Component {
   signOutAsync = async () => {
@@ -89,7 +90,7 @@ class SettingsScreen extends React.Component {
     const { userDetailsWithMetadata, navigation } = this.props;
     if (userDetailsWithMetadata.loading) {
       return (
-        <Spinner color="red" />
+        <Spinner />
       );
     }
     if (typeof (userDetailsWithMetadata.value) === 'undefined') {

@@ -5,7 +5,6 @@ import {
   Container,
   Content,
   Text,
-  Spinner,
 } from 'native-base';
 import PropTypes from 'prop-types';
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -16,6 +15,7 @@ import * as GridHelper from '../helpers/GridHelpers';
 import { navigationShape, outsideMealListWithMetadataShape } from '../constants/Shapes';
 import MealCard from '../components/MealCard';
 import SearchBox from '../components/SearchBox';
+import Spinner from '../components/Spinner';
 import * as OutsideMealActions from '../actionCreators/OutsideMealActions';
 import { filterOutsideMealsByName } from '../utils/MealFilter';
 
@@ -53,7 +53,7 @@ class OutsideMealsScreen extends React.PureComponent {
           <Content
             contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}
           >
-            <Spinner color="red" />
+            <Spinner />
           </Content>
         </Container>
       );

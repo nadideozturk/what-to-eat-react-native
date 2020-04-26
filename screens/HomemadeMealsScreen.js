@@ -5,7 +5,6 @@ import {
   Container,
   Content,
   Text,
-  Spinner,
 } from 'native-base';
 import PropTypes from 'prop-types';
 import IonIcon from 'react-native-vector-icons/Ionicons';
@@ -20,6 +19,7 @@ import * as GridHelper from '../helpers/GridHelpers';
 import { navigationShape, homemadeMealListWithMetadataShape } from '../constants/Shapes';
 import MealCard from '../components/MealCard';
 import SearchBox from '../components/SearchBox';
+import Spinner from '../components/Spinner';
 import { filterMealsByName } from '../utils/MealFilter';
 
 const IoniconsHeaderButton = passMeFurther => (
@@ -61,7 +61,7 @@ class HomemadeMealsScreen extends React.Component {
           <Content
             contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}
           >
-            <Spinner color="red" />
+            <Spinner />
           </Content>
         </Container>
       );

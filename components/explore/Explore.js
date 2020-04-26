@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
-import { Content, Container, Text, Spinner, Tabs, Tab } from 'native-base';
+import { Content, Container, Text, Tabs, Tab } from 'native-base';
 import * as ExploreActions from '../../actionCreators/ExploreActions';
 import {
   homemadeMealListWithMetadataShape,
@@ -9,6 +9,7 @@ import {
   navigationShape,
 } from '../../constants/Shapes';
 import MealCard from '../MealCard';
+import Spinner from '../Spinner';
 import * as GridHelper from '../../helpers/GridHelpers';
 import { filterMealsByName } from '../../utils/MealFilter';
 
@@ -19,7 +20,7 @@ const getTabContent = mealsWithMetadata => {
         <Content
           contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}
         >
-          <Spinner color="red" />
+          <Spinner />
         </Content>
       </Container>
     );

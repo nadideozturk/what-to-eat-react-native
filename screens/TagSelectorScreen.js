@@ -8,11 +8,11 @@ import {
   Icon,
   Input,
   Button,
-  Spinner,
   Content,
   List,
   ListItem,
 } from 'native-base';
+import Spinner from '../components/Spinner';
 import { navigationShape, tagListWithMetadataShape } from '../constants/Shapes';
 
 const filterTags = (userInput, allTags, selectedTags) => {

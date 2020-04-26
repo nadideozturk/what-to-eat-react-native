@@ -5,12 +5,12 @@ import {
   Content,
   Button,
   Text,
-  Spinner,
 } from 'native-base';
 import * as Google from 'expo-google-app-auth';
 import * as Facebook from 'expo-facebook';
 import Config from '../config.json';
 import { navigationShape } from '../constants/Shapes';
+import Spinner from '../components/Spinner';
 
 export default class SignInScreen extends React.Component {
   constructor(props, state) {
@@ -94,7 +94,7 @@ export default class SignInScreen extends React.Component {
             <Content
               contentContainerStyle={{ alignItems: 'center', justifyContent: 'center', flex: 1 }}
             >
-              <Spinner color="red" />
+              <Spinner />
             </Content>
           )
           : (
