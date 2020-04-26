@@ -1,4 +1,6 @@
+import { Alert } from "react-native";
+
 // eslint-disable-next-line import/prefer-default-export
 export const error = message => {
-	alert(message);
+	Alert.alert('An error occurred', message);
 };
