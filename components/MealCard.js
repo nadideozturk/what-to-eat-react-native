@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Text, Card, CardItem, Body } from 'native-base';
-import { Image } from 'react-native';
+import Image from './Image';
 import { mealShape } from '../constants/Shapes';
 import { getMealImageSourceWithDeafult } from '../constants/config/Defaults';
 
@@ -20,7 +20,7 @@ export default class MealCard extends React.PureComponent {
           onPress={onPress}
         >
           <Image
-            style={{ flex: 1, width: null, height: 200 }}
+            style={{ flex: 1, width: 200, height: 200 }}
             source={getMealImageSourceWithDeafult(meal)}
           />
         </CardItem>

@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage, Image } from 'react-native';
+import { AsyncStorage } from 'react-native';
 import {
   Container,
   Content,
@@ -10,6 +10,7 @@ import * as Google from 'expo-google-app-auth';
 import * as Facebook from 'expo-facebook';
 import Config from '../config.json';
 import { navigationShape } from '../constants/Shapes';
+import Image from '../components/Image';
 import Spinner from '../components/Spinner';
 
 export default class SignInScreen extends React.Component {

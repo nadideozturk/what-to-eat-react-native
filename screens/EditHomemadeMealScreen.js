@@ -9,12 +9,13 @@ import {
   Input,
   Label,
 } from 'native-base';
-import { Image, TouchableOpacity } from 'react-native';
+import { TouchableOpacity } from 'react-native';
 import { Formik } from 'formik';
 import * as ImagePicker from 'expo-image-picker';
 import { navigationShape } from '../constants/Shapes';
 import { imagePickerOptions, getMealImageSourceWithDeafult } from '../constants/config/Defaults';
 import TagEditor from '../components/TagEditor';
+import Image from '../components/Image';
 import NumericInput from '../components/NumericInput';
 import RecipeEditor from '../components/RecipeEditor';
 import SubmitButton from '../components/SubmitButton';

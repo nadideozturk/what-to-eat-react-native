@@ -1,7 +1,8 @@
 import React from 'react';
-import { Platform, Image } from 'react-native';
+import { Platform } from 'react-native';
 import { createStackNavigator, createBottomTabNavigator } from 'react-navigation';
 
+import Image from '../components/Image';
 import HomemadeMealsScreen from '../screens/HomemadeMealsScreen';
 import HomemadeMealDetailsScreen from '../screens/HomemadeMealDetailsScreen';
 import NewHomemadeMealScreen from '../screens/NewHomemadeMealScreen';

@@ -1,5 +1,5 @@
 import React from 'react';
-import { Image, Alert, View } from 'react-native';
+import { Alert, View } from 'react-native';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import {
@@ -13,6 +13,7 @@ import {
 } from 'native-base';
 import { mealShape, navigationShape, userDetailsWithMetaDataShape } from '../constants/Shapes';
 import { getMealImageSourceWithDeafult } from '../constants/config/Defaults';
+import Image from './Image';
 import RecipeViewer from './RecipeViewer';
 import TagViewer from './TagViewer';
 import * as HomemadeMealActions from '../actionCreators/HomemadeMealActions';
@@ -87,7 +88,7 @@ class HomemadeMealDetailCard extends React.PureComponent {
         <CardItem cardBody>
           <Image
             source={getMealImageSourceWithDeafult(meal)}
-            style={{ height: 350, width: null, flex: 1 }}
+            style={{ height: 350, width: 400, flex: 1 }}
           />
         </CardItem>
         <CardItem style={{ paddingBottom: 0 }}>

@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, TouchableOpacity, Image } from 'react-native';
+import { View, TouchableOpacity } from 'react-native';
 import PropTypes from 'prop-types';
 import { Icon, Text, Badge, Button, Item } from 'native-base';
 import { tagShape, navigationShape } from '../constants/Shapes';
+import Image from './Image';
 
 export default class TagEditor extends React.PureComponent {
   render() {
