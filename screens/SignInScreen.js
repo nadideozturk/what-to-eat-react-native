@@ -101,10 +101,7 @@ export default class SignInScreen extends React.Component {
           : (
             <Content>
               <Image
-                source={
-                    // eslint-disable-next-line global-require
-                    require('../assets/images/logo.png')
-                }
+                source={require('../assets/images/logo.png')}
                 fadeDuration={0}
                 style={{ width: 260, height: 260, paddingTop: 450 }}
               />

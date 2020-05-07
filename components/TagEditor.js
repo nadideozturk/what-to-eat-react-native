@@ -31,7 +31,6 @@ export default class TagEditor extends React.PureComponent {
                 >
                   <Image
                     style={{ width: 15, height: 15, marginLeft: 2 }}
-                    // eslint-disable-next-line global-require
                     source={require('../assets/images/close.png')}
                   />
                 </TouchableOpacity>

@@ -45,9 +45,7 @@ HomemadeMealsStack.navigationOptions = {
     <Image
       source={
         focused
-          // eslint-disable-next-line global-require
           ? require('../assets/images/cook-active.png')
-          // eslint-disable-next-line global-require
           : require('../assets/images/cook-inactive.png')
       }
       fadeDuration={0}
@@ -77,9 +75,7 @@ OutsideMealsStack.navigationOptions = {
     <Image
       source={
         focused
-          // eslint-disable-next-line global-require
           ? require('../assets/images/order-active.png')
-          // eslint-disable-next-line global-require
           : require('../assets/images/order-inactive.png')
       }
       fadeDuration={0}
@@ -105,9 +101,7 @@ ExploreStack.navigationOptions = {
     <Image
       source={
         focused
-          // eslint-disable-next-line global-require
           ? require('../assets/images/search-active.png')
-          // eslint-disable-next-line global-require
           : require('../assets/images/search-inactive.png')
       }
       fadeDuration={0}
@@ -133,9 +127,7 @@ SettingsStack.navigationOptions = {
     <Image
       source={
         focused
-          // eslint-disable-next-line global-require
           ? require('../assets/images/settings-active.png')
-          // eslint-disable-next-line global-require
           : require('../assets/images/settings-inactive.png')
       }
       fadeDuration={0}

@@ -19,9 +19,7 @@ import AppNavigator from './navigation/AppNavigator';
 async function loadResourcesAsync() {
   await Promise.all([
     Asset.loadAsync([
-      // eslint-disable-next-line global-require
       require('./assets/images/robot-dev.png'),
-      // eslint-disable-next-line global-require
       require('./assets/images/robot-prod.png'),
     ]),
     Font.loadAsync({
@@ -29,7 +27,6 @@ async function loadResourcesAsync() {
       ...Ionicons.font,
       // We include SpaceMono because we use it in HomeScreen.js. Feel free to
       // remove this if you are not using it in your app
-      // eslint-disable-next-line global-require
       'space-mono': require('./assets/fonts/SpaceMono-Regular.ttf'),
     }),
   ]);

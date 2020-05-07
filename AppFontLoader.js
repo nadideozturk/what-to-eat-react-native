@@ -14,9 +14,7 @@ export default class AppFontLoader extends React.Component {
   async componentDidMount() {
     try {
       await Font.loadAsync({
-        // eslint-disable-next-line global-require
         Roboto: require('native-base/Fonts/Roboto.ttf'),
-        // eslint-disable-next-line global-require
         Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
       });
       this.setState({ fontLoaded: true });
