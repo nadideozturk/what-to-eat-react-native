@@ -3,6 +3,7 @@ import { AsyncStorage } from 'react-native';
 import * as actionTypes from '../constants/ActionTypes';
 import { getUrl } from '../constants/config/BackendConfig';
 import * as CloudinaryWrapper from '../utils/CloudinaryWrapper';
+import * as ImageUtils from '../utils/ImageUtils';
 
 const fetchHomemadeMealListStart = () => ({
   type: actionTypes.FETCH_HOMEMADE_MEAL_LIST_START,
@@ -60,7 +61,8 @@ export const createHomemadeMeal = async ({
 }) => {
   dispatch(createHomemadeMealStart());
 
-  CloudinaryWrapper.uploadFile(imageFile)
+  const resizedImage = await ImageUtils.downsize(imageFile);
+  CloudinaryWrapper.uploadFile(resizedImage)
     .then(xhrResponse => JSON.parse(xhrResponse.target.response).secure_url)
     .then(async photoUrl => {
       const mealWithPhotoUrl = {
@@ -154,7 +156,8 @@ export const updateHomemadeMeal = async ({
   let { photoUrl } = meal;
   if (imageFile) {
     // a new image is selected, needs to be uploaded to image server
-    const xhrResponse = await CloudinaryWrapper.uploadFile(imageFile);
+    const resizedImage = await ImageUtils.downsize(imageFile);
+    const xhrResponse = await CloudinaryWrapper.uploadFile(resizedImage);
     photoUrl = JSON.parse(xhrResponse.target.response).secure_url;
   }
   const mealWithPhotoUrl = {

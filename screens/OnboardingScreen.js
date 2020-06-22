@@ -1,5 +1,5 @@
 import React from 'react';
-import { AsyncStorage, StyleSheet, Button, View, Text } from 'react-native';
+import { AsyncStorage, StyleSheet } from 'react-native';
 import { Container, Content } from 'native-base';
 import Onboarding from 'react-native-onboarding-swiper';
 import Spinner from '../components/Spinner';
