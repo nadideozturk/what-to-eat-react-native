@@ -39,6 +39,7 @@ export const downsize = async image => {
     {
       compress: 0.8,
       format: ImageManipulator.SaveFormat.JPEG,
+      base64: true,
     },
   );
 };

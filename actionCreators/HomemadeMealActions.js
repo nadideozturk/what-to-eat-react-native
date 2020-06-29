@@ -2,7 +2,6 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import * as actionTypes from '../constants/ActionTypes';
 import { getUrl } from '../constants/config/BackendConfig';
-import * as CloudinaryWrapper from '../utils/CloudinaryWrapper';
 import * as ImageUtils from '../utils/ImageUtils';
 
 const fetchHomemadeMealListStart = () => ({
@@ -62,31 +61,25 @@ export const createHomemadeMeal = async ({
   dispatch(createHomemadeMealStart());
 
   const resizedImage = await ImageUtils.downsize(imageFile);
-  CloudinaryWrapper.uploadFile(resizedImage)
-    .then(xhrResponse => JSON.parse(xhrResponse.target.response).secure_url)
-    .then(async photoUrl => {
-      const mealWithPhotoUrl = {
-        ...meal,
-        photoUrl,
-      };
-      return axios.post(
-        getUrl('/homemademeals'),
-        mealWithPhotoUrl,
-        {
-          headers: {
-            Authorization: await AsyncStorage.getItem('idToken'),
-          },
+  const mealWithPhotoContent = {
+    ...meal,
+    photoContent: resizedImage.base64,
+  };
+  try {
+    const response = await axios.post(
+      getUrl('/homemademeals'),
+      mealWithPhotoContent,
+      {
+        headers: {
+          Authorization: await AsyncStorage.getItem('idToken'),
         },
-      );
-    })
-    .then(response => {
-      successHandler();
-      dispatch(createHomemadeMealSuccess(response));
-    })
-    .catch(error => {
-      dispatch(createHomemadeMealFail(error));
-      // TODO handle failures alert(`upload failed, ${error}`);
-    });
+      },
+    );
+    successHandler();
+    dispatch(createHomemadeMealSuccess(response));
+  } catch (e) {
+    dispatch(createHomemadeMealFail(e));
+  }
 };
 
 const deleteHomemadeMealStart = () => ({
@@ -153,35 +146,34 @@ export const updateHomemadeMeal = async ({
 }) => {
   dispatch(updateHomemadeMealStart());
 
-  let { photoUrl } = meal;
+  let { photoContent } = meal;
   if (imageFile) {
     // a new image is selected, needs to be uploaded to image server
     const resizedImage = await ImageUtils.downsize(imageFile);
-    const xhrResponse = await CloudinaryWrapper.uploadFile(resizedImage);
-    photoUrl = JSON.parse(xhrResponse.target.response).secure_url;
+    photoContent = resizedImage.base64;
   }
-  const mealWithPhotoUrl = {
+  const mealWithPhotoContent = {
     ...meal,
-    photoUrl,
+    photoContent,
   };
-  axios
-    .put(
+  try {
+    const response = await axios.put(
       getUrl('/homemademeals'),
-      mealWithPhotoUrl,
+      mealWithPhotoContent,
       {
         headers: {
           Authorization: await AsyncStorage.getItem('idToken'),
         },
       },
-    )
-    .then(() => {
-      dispatch(setCurrentHomemadeMeal(mealWithPhotoUrl));
-      successHandler();
-      // dispatch(updateHomemadeMealSuccess(response)); backend is not sending
-      // updated meal
-    })
-    .catch(error => {
-      dispatch(updateHomemadeMealFail(error));
-      // TODO handle failures alert(`upload failed, ${error}`);
-    });
+    );
+
+    // Backend determines what is the newest photo URL
+    mealWithPhotoContent.photoUrl = response.data.photoUrl;
+
+    dispatch(setCurrentHomemadeMeal(mealWithPhotoContent));
+    successHandler();
+  } catch (e) {
+    console.log(e);
+    dispatch(updateHomemadeMealFail(e));
+  }
 };

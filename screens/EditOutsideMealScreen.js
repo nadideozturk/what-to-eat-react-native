@@ -49,7 +49,7 @@ class EditOutsideMealScreen extends React.Component {
                 restaurantName: values.restaurantName,
                 catId: 'defaultCategory',
                 price: Number(values.price),
-                photoContent: 'Empty',
+                photoContent: '',
                 tags: values.tags,
               };
               OutsideMealActions.updateOutsideMeal({

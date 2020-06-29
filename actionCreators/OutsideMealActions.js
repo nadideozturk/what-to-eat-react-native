@@ -2,7 +2,6 @@ import axios from 'axios';
 import { AsyncStorage } from 'react-native';
 import * as actionTypes from '../constants/ActionTypes';
 import { getUrl } from '../constants/config/BackendConfig';
-import * as CloudinaryWrapper from '../utils/CloudinaryWrapper';
 import * as ImageUtils from '../utils/ImageUtils';
 
 const fetchOutsideMealListStart = () => ({
@@ -62,31 +61,25 @@ export const createOutsideMeal = async ({
   dispatch(createOutsideMealStart());
 
   const resizedImage = await ImageUtils.downsize(imageFile);
-  CloudinaryWrapper.uploadFile(resizedImage)
-    .then(xhrResponse => JSON.parse(xhrResponse.target.response).secure_url)
-    .then(async photoUrl => {
-      const mealWithPhotoUrl = {
-        ...meal,
-        photoUrl,
-      };
-      return axios.post(
-        getUrl('/outsidemeals'),
-        mealWithPhotoUrl,
-        {
-          headers: {
-            Authorization: await AsyncStorage.getItem('idToken'),
-          },
+  const mealWithPhotoContent = {
+    ...meal,
+    photoContent: resizedImage.base64,
+  };
+  try {
+    const response = axios.post(
+      getUrl('/outsidemeals'),
+      mealWithPhotoContent,
+      {
+        headers: {
+          Authorization: await AsyncStorage.getItem('idToken'),
         },
-      );
-    })
-    .then(response => {
-      successHandler();
-      dispatch(createOutsideMealSuccess(response));
-    })
-    .catch(error => {
-      dispatch(createOutsideMealFail(error));
-      // TODO handle failures alert(`upload failed, ${error}`);
-    });
+      },
+    );
+    successHandler();
+    dispatch(createOutsideMealSuccess(response));
+  } catch (e) {
+    dispatch(createOutsideMealFail(e));
+  }
 };
 
 const deleteOutsideMealStart = () => ({
@@ -153,35 +146,34 @@ export const updateOutsideMeal = async ({
 }) => {
   dispatch(updateOutsideMealStart());
 
-  let { photoUrl } = meal;
+  let { photoContent } = meal;
   if (imageFile) {
     // a new image is selected, needs to be uploaded to image server
     const resizedImage = await ImageUtils.downsize(imageFile);
-    const xhrResponse = await CloudinaryWrapper.uploadFile(resizedImage);
-    photoUrl = JSON.parse(xhrResponse.target.response).secure_url;
+    photoContent = resizedImage.base64;
   }
-  const mealWithPhotoUrl = {
+  const mealWithPhotoContent = {
     ...meal,
-    photoUrl,
+    photoContent,
   };
-  axios
-    .put(
+  try {
+    const response = await axios.put(
       getUrl('/outsidemeals'),
-      mealWithPhotoUrl,
+      mealWithPhotoContent,
       {
         headers: {
           Authorization: await AsyncStorage.getItem('idToken'),
         },
       },
-    )
-    .then(() => {
-      dispatch(setCurrentOutsideMeal(mealWithPhotoUrl));
-      successHandler();
-      // dispatch(updateOutsideMealSuccess(response)); backend is not sending
-      // updated meal
-    })
-    .catch(error => {
-      dispatch(updateOutsideMealFail(error));
-      // TODO handle failures alert(`upload failed, ${error}`);
-    });
+    );
+
+    // Backend determines what is the newest photo URL
+    mealWithPhotoContent.photoUrl = response.data.photoUrl;
+
+    dispatch(setCurrentOutsideMeal(mealWithPhotoContent));
+    successHandler();
+  } catch (e) {
+    console.log(e);
+    dispatch(updateOutsideMealFail(e));
+  }
 };

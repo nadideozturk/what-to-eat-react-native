@@ -51,7 +51,7 @@ class EditHomemadeMealScreen extends React.Component {
                 catId: 'defaultCategory',
                 durationInMinutes: Number(values.durationInMinutes),
                 recipe: values.recipe,
-                photoContent: 'Empty',
+                photoContent: '',
                 tags: values.tags,
               };
               HomemadeMealActions.updateHomemadeMeal({
