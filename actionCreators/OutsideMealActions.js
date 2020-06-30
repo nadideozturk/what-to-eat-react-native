@@ -66,7 +66,7 @@ export const createOutsideMeal = async ({
     photoContent: resizedImage.base64,
   };
   try {
-    const response = axios.post(
+    const response = await axios.post(
       getUrl('/outsidemeals'),
       mealWithPhotoContent,
       {
