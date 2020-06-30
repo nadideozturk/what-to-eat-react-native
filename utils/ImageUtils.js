@@ -20,8 +20,11 @@ export const downsize = async image => {
   if (image.height <= 0) {
     throw new Error(`non positive height: ${image.height}`);
   }
+  let targetWidth = TARGET_RESIZE_LENGTH;
+  let targetHeight = TARGET_RESIZE_LENGTH;
   if (image.width <= MIN_RESIZE_LENGTH && image.height <= MIN_RESIZE_LENGTH) {
-    return image;
+    targetWidth = image.width;
+    targetHeight = image.height;
   }
   if (!image.uri) {
     throw new Error('image.uri is empty');
@@ -31,13 +34,13 @@ export const downsize = async image => {
     [
       {
         resize: {
-          width: TARGET_RESIZE_LENGTH,
-          height: TARGET_RESIZE_LENGTH,
+          width: targetWidth,
+          height: targetHeight,
         },
       },
     ],
     {
-      compress: 0.8,
+      compress: 0.9,
       format: ImageManipulator.SaveFormat.JPEG,
       base64: true,
     },
