@@ -34,7 +34,7 @@ class OutsideMealsScreen extends React.PureComponent {
 
   async componentDidMount() {
     const { navigation, dispatch } = this.props;
-    OutsideMealActions.fetchOutsideMealList(dispatch);
+
     this.willFocusSubscription = navigation.addListener(
       'willFocus',
       () => {
